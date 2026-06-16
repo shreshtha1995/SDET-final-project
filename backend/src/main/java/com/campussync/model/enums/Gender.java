@@ -1,8 +1,6 @@
 package com.campussync.model.enums;
 
-public enum DoubtCategory {
-    CITIES,
-    TRANSPORT,
-    PG,
-    GENERAL
+public enum Gender {
+    MALE,
+    FEMALE
 }
