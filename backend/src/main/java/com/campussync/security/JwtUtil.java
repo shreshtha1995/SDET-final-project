@@ -24,6 +24,7 @@ public class JwtUtil {
         /*  turn the secret string into a real cryptographic key object (HMAC-SHA).
         We convert to bytes using UTF-8 explicitly so it behaves identically on every machine.  */
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+        // jjwt signs with HS384 (HMAC-SHA-384) algorithm 
         this.expirationMs = expirationMs;
     }
 

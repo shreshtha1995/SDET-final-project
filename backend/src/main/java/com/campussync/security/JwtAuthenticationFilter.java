@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    // OncePerRequestFilter — Spring base class guaranteeing the method runs exactly once per request
+    // OncePerRequestFilter — Spring base class guaranteeing the method runs exactly once per request not multiple times
 
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService userDetailsService;

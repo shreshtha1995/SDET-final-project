@@ -17,8 +17,8 @@ public class CurrentUserService {
         this.userRepository = userRepository;
     }
 
-    // get the Current user
-    // helper method for Controllers every time they need currUser refer this
+    // gets the Current user
+    // helper method for Controllers every time they need currentUser refer this
     public User get() {
         var auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || auth.getName() == null) {
