@@ -14,7 +14,7 @@ export const routes: Routes = [
     path: '',
     component: ShellComponent,
     canActivate: [authGuard],
-    children: [
+    children: [   
       { path: 'dashboard', loadComponent: () => import('./features/home/home.component').then((m) => m.HomeComponent) },
       { path: 'browse', loadComponent: () => import('./features/browse/browse.component').then((m) => m.BrowseComponent) },
       { path: 'listing/:id', loadComponent: () => import('./features/browse/listing-detail.component').then((m) => m.ListingDetailComponent) },
