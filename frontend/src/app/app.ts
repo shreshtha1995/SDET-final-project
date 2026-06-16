@@ -10,7 +10,7 @@ import { ThemeService } from './core/theme.service';
 })
 export class App {
   protected readonly title = signal('CampusSync');
-  private theme = inject(ThemeService);
+  private theme = inject(ThemeService );
 
   constructor() {
     this.theme.init();

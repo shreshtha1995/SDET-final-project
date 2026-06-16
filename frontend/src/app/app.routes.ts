@@ -25,6 +25,7 @@ export const routes: Routes = [
       { path: 'forum', loadComponent: () => import('./features/forum/forum.component').then((m) => m.ForumComponent) },
       { path: 'profile', loadComponent: () => import('./features/home/profile.component').then((m) => m.ProfileComponent) },
       { path: 'admin', canActivate: [adminGuard], loadComponent: () => import('./features/admin/admin.component').then((m) => m.AdminComponent) }
+    
     ]
   },
   { path: '**', redirectTo: '' }
