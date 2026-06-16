@@ -2,7 +2,7 @@ import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PostingQueryService } from './posting-query.service';
-import { WishlistService } from '../my-collection/wishlist.service';
+//import { WishlistService } from '../my-collection/wishlist.service';
 import { Posting } from '../../models/models';
 import { API_ORIGIN } from '../../models/locations';
 import { IconComponent } from '../../shared/icon.component';
@@ -123,7 +123,7 @@ import { StarsComponent } from '../../shared/stars.component';
 })
 export class ListingDetailComponent implements OnInit {
   private postingService = inject(PostingQueryService);
-  private wishlist = inject(WishlistService);
+  //private wishlist = inject(WishlistService);
   private route = inject(ActivatedRoute);
 
   posting = signal<Posting | null>(null);
@@ -138,14 +138,14 @@ export class ListingDetailComponent implements OnInit {
       next: (p) => this.posting.set(p),
       error: () => this.error.set('Listing not found.')
     });
-    this.wishlist.savedIds().subscribe((ids) => this.saved.set(ids.includes(id)));
+    //this.wishlist.savedIds().subscribe((ids) => this.saved.set(ids.includes(id)));
   }
 
   toggleWishlist(id: number): void {
     if (this.saved()) {
-      this.wishlist.remove(id).subscribe(() => this.saved.set(false));
+     // this.wishlist.remove(id).subscribe(() => this.saved.set(false));
     } else {
-      this.wishlist.add(id).subscribe(() => this.saved.set(true));
+     // this.wishlist.add(id).subscribe(() => this.saved.set(true));
     }
   }
 
