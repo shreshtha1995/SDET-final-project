@@ -1,4 +1,6 @@
-com.campussync.dto.posting.CreatePostingRequest;
+package com.campussync.service;
+
+
 import com.campussync.dto.posting.CreatePostingRequest;
 import com.campussync.dto.posting.PostingResponse;
 import com.campussync.exception.ApiException;
@@ -10,6 +12,7 @@ import com.campussync.repository.PostingRepository;
 import com.campussync.security.CurrentUserService;
 
 
+import com.campussync.service.PostingSupport;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
