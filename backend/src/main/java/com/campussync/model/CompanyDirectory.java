@@ -26,6 +26,7 @@ public class CompanyDirectory {
     private IdType idType;
 
     @Column(name = "is_registered", nullable = false)
+    @Builder.Default
     private boolean registered = false;
 
     @Column(name = "created_at")
