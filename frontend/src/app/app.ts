@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ThemeService } from './core/theme.service';
 
@@ -10,7 +10,7 @@ import { ThemeService } from './core/theme.service';
 })
 export class App {
   protected readonly title = signal('CampusSync');
-  private theme = inject (ThemeService );
+  private theme = inject(ThemeService );
 
   constructor() {
     this.theme.init();
