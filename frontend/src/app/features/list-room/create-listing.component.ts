@@ -236,7 +236,7 @@ export class CreateListingComponent implements OnInit {
       : this.postingService.create(this.form);
     obs.subscribe({
         //go to browse rooms for now then when my listing page will be available then go to my listings
-      next: () => this.router.navigateByUrl('/browse'),
+      next: () => this.router.navigateByUrl('/my-listings'),
       error: (err) => { this.error.set(this.readError(err)); this.loading.set(false); }
     });
   }

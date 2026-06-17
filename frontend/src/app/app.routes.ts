@@ -21,10 +21,10 @@ export const routes: Routes = [
       { path: 'listing/:id', loadComponent: () => import('./features/browse/listing-detail.component').then((m) => m.ListingDetailComponent) },
       { path: 'create-listing', loadComponent: () => import('./features/list-room/create-listing.component').then((m) => m.CreateListingComponent) },
       { path: 'edit-listing/:id', loadComponent: () => import('./features/list-room/create-listing.component').then((m) => m.CreateListingComponent) },
-      //{ path: 'my-listings', loadComponent: () => import('./features/my-collection/my-listings.component').then((m) => m.MyListingsComponent) },
-      //{ path: 'wishlist', loadComponent: () => import('./features/my-collection/wishlist.component').then((m) => m.WishlistComponent) },
+      { path: 'my-listings', loadComponent: () => import('./features/my-collection/my-listings.component').then((m) => m.MyListingsComponent) },
+      { path: 'wishlist', loadComponent: () => import('./features/my-collection/wishlist.component').then((m) => m.WishlistComponent) },
       { path: 'forum', loadComponent: () => import('./features/forum/forum.component').then((m) => m.ForumComponent) },
-     // { path: 'profile', loadComponent: () => import('./features/home/profile.component').then((m) => m.ProfileComponent) },
+      { path: 'profile', loadComponent: () => import('./features/home/profile.component').then((m) => m.ProfileComponent) },
       { path: 'admin', canActivate: [adminGuard], loadComponent: () => import('./features/admin/admin.component').then((m) => m.AdminComponent) }
        
     ]
