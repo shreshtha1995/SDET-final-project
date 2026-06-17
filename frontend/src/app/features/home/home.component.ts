@@ -2,7 +2,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
 import { PostingQueryService } from '../browse/posting-query.service';
-//import { MyListingService } from '../my-collection/my-listing.service';
+import { MyListingService } from '../my-collection/my-listing.service';
 import { IconComponent } from '../../shared/icon.component';
 
 /** Authenticated dashboard — a working control panel, distinct from the public Home/landing page. */
@@ -67,7 +67,7 @@ import { IconComponent } from '../../shared/icon.component';
 export class HomeComponent implements OnInit {
   auth = inject(AuthService);
   private postingService = inject(PostingQueryService);
-  //private myListingService = inject(MyListingService);
+  private myListingService = inject(MyListingService);
   private router = inject(Router);
 
   availableCount = signal(0);
@@ -75,7 +75,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.postingService.search().subscribe((list) => this.availableCount.set(list.length));
-   // this.myListingService.myListings().subscribe((list) => this.myCount.set(list.length));
+   this.myListingService.myListings().subscribe((list) => this.myCount.set(list.length));
   }
 
   go(path: string): void { this.router.navigateByUrl(path); }
