@@ -51,6 +51,7 @@ interface Picked { file: File; preview: string; }
           <select [(ngModel)]="form.sharingType" (change)="clampBeds()">
             <option value="DOUBLE">Double (2 beds)</option>
             <option value="TRIPLE">Triple (3 beds)</option>
+            <option value="FOUR">4 Sharing (4 beds)</option>
           </select>
         </div>
         <div>
@@ -151,7 +152,7 @@ export class CreateListingComponent implements OnInit {
 
   isCandidate = () => this.auth.user()?.idType === 'CANDIDATE';
   gender = () => this.auth.user()?.gender;
-  totalBeds = () => (this.form.sharingType === 'TRIPLE' ? 3 : 2);
+  totalBeds = () => this.form.sharingType === 'FOUR' ? 4 : this.form.sharingType === 'TRIPLE' ? 3 : 2;
   // The provider occupies one bed, so the most they can offer is (total - 1).
   // Plain method (not computed) so it re-evaluates when sharing type changes.
   bedOptions(): number[] {

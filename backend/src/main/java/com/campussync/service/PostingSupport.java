@@ -40,13 +40,23 @@ public class PostingSupport {
     }
 
     public int bedsFor(SharingType type) {
-        return type == SharingType.TRIPLE ? 3 : 2;
+        return switch (type) {
+            case DOUBLE -> 2;
+            case TRIPLE -> 3;
+            case FOUR -> 4;
+        };
     }
 
     public void validateBeds(int availableBeds, int totalBeds) {
         if (availableBeds < 1 || availableBeds > totalBeds) {
+            String sharingLabel = switch (totalBeds) {
+                case 2 -> "double";
+                case 3 -> "triple";
+                case 4 -> "4";
+                default -> String.valueOf(totalBeds);
+            };
             throw ApiException.badRequest("Vacant beds must be between 1 and " + totalBeds
-                    + " for a " + (totalBeds == 3 ? "triple" : "double") + "-sharing room.");
+                    + " for a " + sharingLabel + "-sharing room.");
         }
     }
 

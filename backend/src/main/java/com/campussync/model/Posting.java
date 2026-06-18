@@ -5,6 +5,8 @@ import com.campussync.model.enums.SharingType;
 import com.campussync.model.enums.TenantPreference;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -38,7 +40,8 @@ public class Posting {
     private String officeCampus;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "sharing_type", nullable = false)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(name = "sharing_type", nullable = false, length = 20)
     private SharingType sharingType;
 
     @Enumerated(EnumType.STRING)
@@ -48,7 +51,7 @@ public class Posting {
     @Column(name = "rent_amount", nullable = false, precision = 10, scale = 2)
     private BigDecimal rentAmount;
 
-    /** Total beds in the room (2 for DOUBLE, 3 for TRIPLE). */
+    /** Total beds in the room (2 for DOUBLE, 3 for TRIPLE, 4 for FOUR). */
     @Column(name = "total_beds", nullable = false)
     private Integer totalBeds;
 

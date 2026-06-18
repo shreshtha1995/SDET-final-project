@@ -41,6 +41,7 @@ import { StarsComponent } from '../../shared/stars.component';
           <option [ngValue]="undefined">Any</option>
           <option value="DOUBLE">Double</option>
           <option value="TRIPLE">Triple</option>
+          <option value="FOUR">4 Sharing</option>
         </select>
       </div>
       <div>

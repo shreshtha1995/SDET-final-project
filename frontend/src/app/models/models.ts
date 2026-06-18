@@ -3,7 +3,7 @@
 export type Gender = 'MALE' | 'FEMALE';
 export type IdType = 'EMPLOYEE' | 'CANDIDATE';
 export type Role = 'USER' | 'SUPER_ADMIN';
-export type SharingType = 'DOUBLE' | 'TRIPLE';
+export type SharingType = 'DOUBLE' | 'TRIPLE' | 'FOUR';
 export type TenantPreference = 'MALE_ONLY' | 'FEMALE_ONLY' | 'ANYONE';
 export type PostingStatus = 'AVAILABLE' | 'PENDING' | 'EXPIRED';
 export type DoubtCategory = 'CITIES' | 'TRANSPORT' | 'PG' | 'GENERAL';
