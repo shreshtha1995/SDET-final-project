@@ -117,6 +117,11 @@ input:focus, select:focus, textarea:focus {
 input.invalid, select.invalid, textarea.invalid { border-color: var(--danger); }
 textarea { min-height: 84px; resize: vertical; }
 select option { background: var(--card); color: var(--text); }
+input[type='password']::-ms-reveal,
+input[type='password']::-ms-clear,
+input[type='password']::-webkit-credentials-auto-fill-button {
+  display: none;
+}
 ::placeholder { color: var(--muted); opacity: .85; }
 .field-error { color: var(--danger); font-size: 12.5px; margin-top: 4px; }
 .hint { color: var(--muted); font-size: 12.5px; margin-top: 4px; }

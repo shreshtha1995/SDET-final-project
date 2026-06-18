@@ -20,10 +20,8 @@ import { IconComponent } from '../../shared/icon.component';
           <input id="login-email" type="email" [(ngModel)]="email" name="loginEmail" autocomplete="off" placeholder="you@cognizant.com" />
 
           <label for="login-password">Password</label>
-          <input id="login-password" type="password" [(ngModel)]="password" name="loginPwd" autocomplete="new-password" (keyup.enter)="login()" />
-          <label>Password</label>
           <div class="pwd-wrap">
-            <input [type]="showPwd() ? 'text' : 'password'" [(ngModel)]="password" name="loginPwd" autocomplete="new-password" (keyup.enter)="login()" />
+            <input id="login-password" [type]="showPwd() ? 'text' : 'password'" [(ngModel)]="password" name="loginPwd" autocomplete="new-password" (keyup.enter)="login()" />
             <button type="button" class="pwd-toggle" (click)="showPwd.set(!showPwd())"
                     [attr.aria-label]="showPwd() ? 'Hide password' : 'Show password'" tabindex="-1">
               <app-icon [name]="showPwd() ? 'eye-off' : 'eye'" [size]="18" />
@@ -68,6 +66,8 @@ import { IconComponent } from '../../shared/icon.component';
   styles: [`
     .pwd-wrap { position: relative; display: flex; align-items: center; }
     .pwd-wrap input { padding-right: 44px; }
+    .pwd-wrap input::-ms-reveal,
+    .pwd-wrap input::-ms-clear { display: none; }
     .pwd-toggle {
       position: absolute;
       right: 4px;
