@@ -1,9 +1,11 @@
-FROM maven:3.8.7-eclipse-temurin-17 AS build
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /workspace
 COPY backend/ ./backend/
 RUN mvn -f backend/pom.xml -DskipTests clean package -U
-FROM eclipse-temurin:17-jre-jammy
+
+FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
 COPY --from=build /workspace/backend/target/*.jar /app/app.jar
-EXPOSE 8080
+# Default port (can be overridden with PORT env var)
+EXPOSE 8081
 ENTRYPOINT ["java","-jar","/app/app.jar"]
