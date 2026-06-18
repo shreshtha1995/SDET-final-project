@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
 import { Profile } from '../../models/models';
 
-
+/** Shows the logged-in user's details and lets them edit phone / delete their account. */
 @Component({
   selector: 'app-profile',
   imports: [FormsModule],
@@ -13,7 +13,7 @@ import { Profile } from '../../models/models';
     <p class="muted">Your account details on CampusSync.</p>
 
     @if (profile(); as p) {
-      <div class="card profile-card">
+      <div class="card profile-card" id="profile-card">
         <div class="phead">
           <span class="avatar-lg">{{ initials(p.name) }}</span>
           <div>
@@ -23,42 +23,42 @@ import { Profile } from '../../models/models';
         </div>
         <hr class="divider" />
         <div class="rows">
-          <div class="prow"><span class="k">Cognizant ID</span><span class="v">{{ p.cognizantId }}</span></div>
-          <div class="prow"><span class="k">Email</span><span class="v">{{ p.email }}</span></div>
+          <div class="prow"><span class="k">Cognizant ID</span><span class="v" id="profile-cognizant-id">{{ p.cognizantId }}</span></div>
+          <div class="prow"><span class="k">Email</span><span class="v" id="profile-email">{{ p.email }}</span></div>
           <div class="prow">
             <span class="k">Phone</span>
             @if (editingPhone()) {
               <span class="phone-edit">
-                <input [(ngModel)]="phoneInput" maxlength="10" placeholder="10 digits" />
-                <button class="secondary" (click)="savePhone()" [disabled]="savingPhone()">Save</button>
-                <button class="link" (click)="editingPhone.set(false)">Cancel</button>
+                <input id="profile-phone-input" [(ngModel)]="phoneInput" maxlength="10" placeholder="10 digits" />
+                <button id="profile-phone-save-btn" class="secondary" (click)="savePhone()" [disabled]="savingPhone()">Save</button>
+                <button id="profile-phone-cancel-btn" class="link" (click)="editingPhone.set(false)">Cancel</button>
               </span>
             } @else {
-              <span class="v phone-view">{{ p.phoneNumber }}
-                <button class="link" (click)="startEditPhone(p.phoneNumber)">Edit</button>
+              <span class="v phone-view" id="profile-phone-view">{{ p.phoneNumber }}
+                <button id="profile-phone-edit-btn" class="link" (click)="startEditPhone(p.phoneNumber)">Edit</button>
               </span>
             }
           </div>
-          <div class="prow"><span class="k">Gender</span><span class="v">{{ p.gender }}</span></div>
+          <div class="prow"><span class="k">Gender</span><span class="v" id="profile-gender">{{ p.gender }}</span></div>
         </div>
-        @if (phoneError()) { <p class="error">{{ phoneError() }}</p> }
-        @if (phoneMsg()) { <p class="success">{{ phoneMsg() }}</p> }
+        @if (phoneError()) { <p id="profile-phone-error" class="error">{{ phoneError() }}</p> }
+        @if (phoneMsg()) { <p id="profile-phone-msg" class="success">{{ phoneMsg() }}</p> }
       </div>
 
-      <div class="card danger-zone">
+      <div class="card danger-zone" id="profile-danger-zone">
         <h3>Delete account</h3>
         <p class="muted">This permanently removes your account, your listings, and your forum posts.
           Your Cognizant ID becomes available to register again. This cannot be undone.</p>
         @if (!confirming()) {
-          <button class="danger" (click)="confirming.set(true)">Delete my account</button>
+          <button id="profile-delete-btn" class="danger" (click)="confirming.set(true)">Delete my account</button>
         } @else {
           <p class="error">Are you sure? This is permanent.</p>
           <div class="row" style="max-width:360px">
-            <button class="danger" [disabled]="deleting()" (click)="remove()">{{ deleting() ? 'Deleting...' : 'Yes, delete' }}</button>
-            <button class="secondary" (click)="confirming.set(false)">Cancel</button>
+            <button id="profile-delete-confirm-btn" class="danger" [disabled]="deleting()" (click)="remove()">{{ deleting() ? 'Deleting...' : 'Yes, delete' }}</button>
+            <button id="profile-delete-cancel-btn" class="secondary" (click)="confirming.set(false)">Cancel</button>
           </div>
         }
-        @if (error()) { <p class="error">{{ error() }}</p> }
+        @if (error()) { <p id="profile-error" class="error">{{ error() }}</p> }
       </div>
     } @else {
       <p class="muted">Loading...</p>

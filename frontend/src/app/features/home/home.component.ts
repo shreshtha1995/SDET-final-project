@@ -10,7 +10,7 @@ import { IconComponent } from '../../shared/icon.component';
   selector: 'app-dashboard',
   imports: [IconComponent],
   template: `
-    <div class="greeting card">
+    <div class="greeting card" id="dashboard-greeting">
       <div>
         <h1>Welcome, {{ auth.user()?.name }}</h1>
         <p class="muted">
@@ -20,27 +20,27 @@ import { IconComponent } from '../../shared/icon.component';
       <span class="avatar-xl">{{ initials() }}</span>
     </div>
 
-    <div class="stats">
-      <div class="stat card">
+    <div class="stats" id="dashboard-stats">
+      <div class="stat card" id="dashboard-stat-available">
         <div class="num">{{ availableCount() }}</div>
         <div class="muted">Rooms available to you</div>
       </div>
-      <div class="stat card">
+      <div class="stat card" id="dashboard-stat-my-listings">
         <div class="num">{{ myCount() }}</div>
         <div class="muted">Your active listings</div>
       </div>
-      <div class="stat card forum-stat">
+      <div class="stat card forum-stat" id="dashboard-stat-forum">
         <app-icon name="chat" [size]="30" />
         <div class="muted">Community forum</div>
       </div>
     </div>
 
     <h3 class="sec">Quick actions</h3>
-    <div class="actions">
-      <button class="action" (click)="go('/browse')"><app-icon name="search" [size]="26" /> Browse Rooms</button>
-      <button class="action" (click)="go('/create-listing')"><app-icon name="home" [size]="26" /> List a Room</button>
-      <button class="action" (click)="go('/my-listings')"><app-icon name="list" [size]="26" /> My Listings</button>
-      <button class="action" (click)="go('/forum')"><app-icon name="help" [size]="26" /> Ask the Forum</button>
+    <div class="actions" id="dashboard-actions">
+      <button id="dashboard-browse-btn" class="action" (click)="go('/browse')"><app-icon name="search" [size]="26" /> Browse Rooms</button>
+      <button id="dashboard-create-listing-btn" class="action" (click)="go('/create-listing')"><app-icon name="home" [size]="26" /> List a Room</button>
+      <button id="dashboard-my-listings-btn" class="action" (click)="go('/my-listings')"><app-icon name="list" [size]="26" /> My Listings</button>
+      <button id="dashboard-forum-btn" class="action" (click)="go('/forum')"><app-icon name="help" [size]="26" /> Ask the Forum</button>
     </div>
   `,
   styles: [`
@@ -75,7 +75,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.postingService.search().subscribe((list) => this.availableCount.set(list.length));
-   this.myListingService.myListings().subscribe((list) => this.myCount.set(list.length));
+    this.myListingService.myListings().subscribe((list) => this.myCount.set(list.length));
   }
 
   go(path: string): void { this.router.navigateByUrl(path); }

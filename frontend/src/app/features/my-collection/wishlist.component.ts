@@ -21,37 +21,37 @@ import { IconComponent } from '../../shared/icon.component';
     @if (loading()) {
       <p class="muted">Loading...</p>
     } @else if (listings().length === 0) {
-      <div class="card empty">
+      <div class="card empty" id="wishlist-empty">
         <app-icon name="heart" [size]="34" />
         <p>No saved rooms yet. Open a listing and tap the heart to save it here.</p>
       </div>
     } @else {
-      <div class="grid">
+      <div class="grid" id="wishlist-grid">
         @for (p of listings(); track p.id) {
-          <div class="card pg-card">
+          <div class="card pg-card" [id]="'wishlist-card-' + p.id">
             <div class="photo" [class.placeholder]="!p.imageUrls.length"
                  [style.background-image]="p.imageUrls.length ? 'url(' + imgUrl(p.imageUrls[0]) + ')' : ''"
                  (click)="open(p.id)">
               @if (!p.imageUrls.length) { <app-icon name="home" [size]="44" /> }
               <span class="vac-pill">{{ p.availableBeds }}/{{ p.totalBeds }} beds free</span>
-              <button class="heart-btn saved" (click)="remove(p.id, $event)" title="Remove from wishlist">
+              <button class="heart-btn saved" [id]="'wishlist-remove-btn-' + p.id" (click)="remove(p.id, $event)" title="Remove from wishlist">
                 <app-icon name="heart" [filled]="true" [size]="18" />
               </button>
             </div>
             <div class="body" (click)="open(p.id)">
-              <div class="pg-name">{{ p.pgName }}</div>
+              <div class="pg-name" [id]="'wishlist-name-' + p.id">{{ p.pgName }}</div>
               <div class="muted loc"><app-icon name="pin" [size]="14" /> {{ p.officeCampus }}</div>
               <div class="card-row">
                 <span class="rent">{{ p.rentAmount | currency: 'INR' : 'symbol' : '1.0-0' }}<span class="muted">/mo</span></span>
                 <span class="badge" [class.expired]="p.status === 'EXPIRED'">{{ p.status }}</span>
               </div>
-              <button class="view-btn">View details <app-icon name="arrow-right" [size]="16" /></button>
+              <button class="view-btn" [id]="'wishlist-view-btn-' + p.id">View details <app-icon name="arrow-right" [size]="16" /></button>
             </div>
           </div>
         }
       </div>
     }
-    @if (message()) { <p class="success">{{ message() }}</p> }
+    @if (message()) { <p id="wishlist-message" class="success">{{ message() }}</p> }
   `,
   styles: [`
     .pg-card { padding: 0; overflow: hidden; display: flex; flex-direction: column; }
