@@ -14,7 +14,8 @@ export const routes: Routes = [
     path: '',
     component: ShellComponent,
     canActivate: [authGuard],
-    children: [   
+    children: [
+      
       { path: 'dashboard', loadComponent: () => import('./features/home/home.component').then((m) => m.HomeComponent) },
       { path: 'browse', loadComponent: () => import('./features/browse/browse.component').then((m) => m.BrowseComponent) },
       { path: 'listing/:id', loadComponent: () => import('./features/browse/listing-detail.component').then((m) => m.ListingDetailComponent) },
@@ -26,6 +27,7 @@ export const routes: Routes = [
       { path: 'profile', loadComponent: () => import('./features/home/profile.component').then((m) => m.ProfileComponent) },
       { path: 'admin', canActivate: [adminGuard], loadComponent: () => import('./features/admin/admin.component').then((m) => m.AdminComponent) }
     
+       
     ]
   },
   { path: '**', redirectTo: '' }
