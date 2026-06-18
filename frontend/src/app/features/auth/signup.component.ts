@@ -68,7 +68,6 @@ import { IconComponent } from '../../shared/icon.component';
                  maxlength="10" placeholder="10 digits" [class.invalid]="phoneRef.invalid && phoneRef.touched" />
           @if (phoneRef.invalid && phoneRef.touched) { <div class="field-error">Phone must be exactly 10 digits.</div> }
 
-<<<<<<< Updated upstream
           <label class="req">Gender</label>
           <div class="gender-radios" role="radiogroup" aria-label="Gender">
             <label class="gender-radio" [class.checked]="gender === 'MALE'">
@@ -93,22 +92,10 @@ import { IconComponent } from '../../shared/icon.component';
               <app-icon [name]="showPwd() ? 'eye-off' : 'eye'" [size]="18" />
             </button>
           </div>
-=======
-          <label class="req" for="signup-gender">Gender</label>
-          <select id="signup-gender" [(ngModel)]="gender" name="gender">
-            <option value="MALE">Male</option>
-            <option value="FEMALE">Female</option>
-          </select>
-
-          <label class="req" for="signup-password">Password</label>
-          <input id="signup-password" type="password" [(ngModel)]="password" #pwdRef="ngModel" name="pwd" required minlength="6"
-                 pattern="\\S+" [class.invalid]="pwdRef.invalid && pwdRef.touched" />
->>>>>>> Stashed changes
           @if (pwdRef.touched && pwdRef.errors?.['required']) { <div class="field-error">Password is required.</div> }
           @else if (pwdRef.touched && pwdRef.errors?.['minlength']) { <div class="field-error">At least 6 characters.</div> }
           @else if (pwdRef.touched && pwdRef.errors?.['pattern']) { <div class="field-error">Password cannot contain spaces.</div> }
 
-<<<<<<< Updated upstream
           <label class="req">Confirm password</label>
           <div class="pwd-wrap">
             <input [type]="showConfirm() ? 'text' : 'password'" [(ngModel)]="confirmPassword" #cpwdRef="ngModel" name="cpwd" required
@@ -118,11 +105,6 @@ import { IconComponent } from '../../shared/icon.component';
               <app-icon [name]="showConfirm() ? 'eye-off' : 'eye'" [size]="18" />
             </button>
           </div>
-=======
-          <label class="req" for="signup-confirm-password">Confirm password</label>
-          <input id="signup-confirm-password" type="password" [(ngModel)]="confirmPassword" #cpwdRef="ngModel" name="cpwd" required
-                 [class.invalid]="cpwdRef.touched && confirmPassword !== password" />
->>>>>>> Stashed changes
           @if (cpwdRef.touched && confirmPassword !== password) { <div class="field-error">Passwords do not match.</div> }
 
           <button id="signup-submit-btn" class="full-width gradient" style="margin-top:18px" [disabled]="loading()" (click)="register()">
