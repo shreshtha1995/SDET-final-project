@@ -13,17 +13,17 @@ import { IconComponent } from '../../shared/icon.component';
   template: `
     <div class="page-head">
       <h1>My Listings</h1>
-      <button class="gradient new-btn" (click)="router.navigateByUrl('/create-listing')"><app-icon name="plus" [size]="16" /> New Listing</button>
+      <button id="my-listings-new-btn" class="gradient new-btn" (click)="router.navigateByUrl('/create-listing')"><app-icon name="plus" [size]="16" /> New Listing</button>
     </div>
 
     @if (loading()) {
       <p class="muted">Loading...</p>
     } @else if (listings().length === 0) {
-      <div class="card empty">You haven't listed any rooms yet.</div>
+      <div class="card empty" id="my-listings-empty">You haven't listed any rooms yet.</div>
     } @else {
-      <div class="grid">
+      <div class="grid" id="my-listings-grid">
         @for (p of listings(); track p.id) {
-          <div class="card pg-card">
+          <div class="card pg-card" [id]="'my-listing-card-' + p.id">
             @if (canReconfirm(p)) {
               <div class="reconfirm-banner"><app-icon name="clock" [size]="15" /> Posted 7+ days ago — re-confirm it's still vacant</div>
             }
@@ -33,7 +33,7 @@ import { IconComponent } from '../../shared/icon.component';
               @if (!p.imageUrls.length) { <app-icon name="home" [size]="42" /> }
             </div>
             <div class="body">
-              <div class="pg-name" (click)="open(p.id)" style="cursor:pointer">{{ p.pgName }}</div>
+              <div class="pg-name" [id]="'my-listing-name-' + p.id" (click)="open(p.id)" style="cursor:pointer">{{ p.pgName }}</div>
               <div class="muted loc-row"><app-icon name="pin" [size]="14" /> {{ p.officeCampus }}</div>
               <div class="card-row">
                 <span class="rent">{{ p.rentAmount | currency: 'INR' : 'symbol' : '1.0-0' }}<span class="muted">/mo</span></span>
@@ -42,21 +42,21 @@ import { IconComponent } from '../../shared/icon.component';
               <div class="muted">{{ p.availableBeds }}/{{ p.totalBeds }} beds vacant · expires {{ p.expiresAt | date: 'mediumDate' }}</div>
 
               <div class="actions">
-                <button class="secondary act" (click)="edit(p.id)"><app-icon name="edit" [size]="15" /> Edit</button>
-                <button class="link act" style="color:var(--danger)" (click)="confirmDelete.set(p.id)"><app-icon name="trash" [size]="15" /> Delete</button>
+                <button class="secondary act" [id]="'my-listing-edit-btn-' + p.id" (click)="edit(p.id)"><app-icon name="edit" [size]="15" /> Edit</button>
+                <button class="link act" [id]="'my-listing-delete-btn-' + p.id" style="color:var(--danger)" (click)="confirmDelete.set(p.id)"><app-icon name="trash" [size]="15" /> Delete</button>
               </div>
 
               @if (p.status === 'EXPIRED') {
-                <button class="gradient act" (click)="reconfirm(p.id)"><app-icon name="refresh" [size]="16" /> Re-activate</button>
+                <button class="gradient act" [id]="'my-listing-reactivate-btn-' + p.id" (click)="reconfirm(p.id)"><app-icon name="refresh" [size]="16" /> Re-activate</button>
               } @else if (canReconfirm(p)) {
-                <button class="gradient act" (click)="reconfirm(p.id)"><app-icon name="check" [size]="16" /> Re-confirm available</button>
+                <button class="gradient act" [id]="'my-listing-reconfirm-btn-' + p.id" (click)="reconfirm(p.id)"><app-icon name="check" [size]="16" /> Re-confirm available</button>
               }
 
               @if (confirmDelete() === p.id) {
                 <div class="del-confirm">
                   <span class="muted">Delete this listing?</span>
-                  <button class="danger" (click)="remove(p.id)">Yes</button>
-                  <button class="secondary" (click)="confirmDelete.set(null)">No</button>
+                  <button class="danger" [id]="'my-listing-delete-confirm-' + p.id" (click)="remove(p.id)">Yes</button>
+                  <button class="secondary" [id]="'my-listing-delete-cancel-' + p.id" (click)="confirmDelete.set(null)">No</button>
                 </div>
               }
             </div>
@@ -64,7 +64,7 @@ import { IconComponent } from '../../shared/icon.component';
         }
       </div>
     }
-    @if (message()) { <p class="success">{{ message() }}</p> }
+    @if (message()) { <p id="my-listings-message" class="success">{{ message() }}</p> }
   `,
   styles: [`
     .pg-card { padding: 0; overflow: hidden; display: flex; flex-direction: column; }
