@@ -14,43 +14,43 @@ type Filter = 'ALL' | 'EMPLOYEE' | 'CANDIDATE';
       <h1>Company Directory</h1>
     </div>
 
-    <div class="stats">
-      <div class="stat card"><div class="num">{{ entries().length }}</div><div class="muted">Total IDs</div></div>
-      <div class="stat card"><div class="num">{{ count('EMPLOYEE') }}</div><div class="muted">Employees</div></div>
-      <div class="stat card"><div class="num">{{ count('CANDIDATE') }}</div><div class="muted">Candidates</div></div>
-      <div class="stat card"><div class="num">{{ registeredCount() }}</div><div class="muted">Registered</div></div>
+    <div class="stats" id="admin-stats">
+      <div class="stat card" id="admin-stat-total"><div class="num">{{ entries().length }}</div><div class="muted">Total IDs</div></div>
+      <div class="stat card" id="admin-stat-employees"><div class="num">{{ count('EMPLOYEE') }}</div><div class="muted">Employees</div></div>
+      <div class="stat card" id="admin-stat-candidates"><div class="num">{{ count('CANDIDATE') }}</div><div class="muted">Candidates</div></div>
+      <div class="stat card" id="admin-stat-registered"><div class="num">{{ registeredCount() }}</div><div class="muted">Registered</div></div>
     </div>
 
-    <div class="card add-card">
+    <div class="card add-card" id="admin-add-card">
       <h3>Add a valid ID</h3>
       <div class="row add-row">
         <div>
-          <label class="req">ID type</label>
-          <select [(ngModel)]="newType" (change)="formError.set('')">
+          <label class="req" for="admin-new-type">ID type</label>
+          <select id="admin-new-type" [(ngModel)]="newType" (change)="formError.set('')">
             <option value="EMPLOYEE">Employee</option>
             <option value="CANDIDATE">Candidate</option>
           </select>
         </div>
         <div>
-          <label class="req">Cognizant ID</label>
-          <input [(ngModel)]="newId" (input)="formError.set('')"
+          <label class="req" for="admin-new-id">Cognizant ID</label>
+          <input id="admin-new-id" [(ngModel)]="newId" (input)="formError.set('')"
                  [placeholder]="newType === 'EMPLOYEE' ? 'e.g. CTS1006' : 'e.g. CAND2004'"
                  [class.invalid]="!!formError()" />
         </div>
         <div class="add-btn-col">
           <label aria-hidden="true">&nbsp;</label>
-          <button class="gradient full-width" (click)="add()">Add ID</button>
+          <button id="admin-add-btn" class="gradient full-width" (click)="add()">Add ID</button>
         </div>
       </div>
       <div class="hint">{{ newType === 'EMPLOYEE' ? 'Format: CTS followed by digits (e.g. CTS1006)' : 'Format: CAND followed by digits (e.g. CAND2004)' }}</div>
-      @if (formError()) { <p class="error">{{ formError() }}</p> }
-      @if (message()) { <p class="success">{{ message() }}</p> }
+      @if (formError()) { <p id="admin-form-error" class="error">{{ formError() }}</p> }
+      @if (message()) { <p id="admin-message" class="success">{{ message() }}</p> }
     </div>
 
-    <div class="toolbar">
+    <div class="toolbar" id="admin-toolbar">
       <div>
-        <label>Show</label>
-        <select [ngModel]="filter()" (ngModelChange)="filter.set($event); page.set(1)">
+        <label for="admin-filter">Show</label>
+        <select id="admin-filter" [ngModel]="filter()" (ngModelChange)="filter.set($event); page.set(1)">
           <option value="ALL">All IDs</option>
           <option value="EMPLOYEE">Employees only</option>
           <option value="CANDIDATE">Candidates only</option>
@@ -59,13 +59,13 @@ type Filter = 'ALL' | 'EMPLOYEE' | 'CANDIDATE';
     </div>
 
     <div class="card">
-      <table>
+      <table id="admin-directory-table">
         <thead>
           <tr><th>ID</th><th class="col-center">Type</th><th class="col-center">Status</th><th>Registered user</th><th></th></tr>
         </thead>
         <tbody>
           @for (e of paged(); track e.id) {
-            <tr>
+            <tr [id]="'admin-row-' + e.id">
               <td><strong>{{ e.cognizantId }}</strong></td>
               <td class="col-center">{{ e.idType === 'EMPLOYEE' ? 'Employee' : 'Candidate' }}</td>
               <td class="col-center">
@@ -81,11 +81,11 @@ type Filter = 'ALL' | 'EMPLOYEE' | 'CANDIDATE';
                 @if (confirmId() === e.id) {
                   <span class="confirm-inline">
                     <span class="muted">{{ e.registered ? 'Delete this user?' : 'Delete ID?' }}</span>
-                    <button class="link danger-link" (click)="remove(e)">Yes</button>
-                    <button class="link" (click)="confirmId.set(null)">No</button>
+                    <button class="link danger-link" [id]="'admin-delete-confirm-' + e.id" (click)="remove(e)">Yes</button>
+                    <button class="link" [id]="'admin-delete-cancel-' + e.id" (click)="confirmId.set(null)">No</button>
                   </span>
                 } @else {
-                  <button class="link danger-link" (click)="confirmId.set(e.id)">Delete</button>
+                  <button class="link danger-link" [id]="'admin-delete-btn-' + e.id" (click)="confirmId.set(e.id)">Delete</button>
                 }
               </td>
             </tr>
@@ -96,12 +96,12 @@ type Filter = 'ALL' | 'EMPLOYEE' | 'CANDIDATE';
       </table>
 
       @if (totalPages() > 1) {
-        <div class="pagination">
-          <button (click)="prev()" [disabled]="page() === 1">‹ Prev</button>
+        <div class="pagination" id="admin-pagination">
+          <button id="admin-page-prev" (click)="prev()" [disabled]="page() === 1">‹ Prev</button>
           @for (p of pages(); track p) {
-            <button [class.active]="p === page()" (click)="page.set(p)">{{ p }}</button>
+            <button [id]="'admin-page-' + p" [class.active]="p === page()" (click)="page.set(p)">{{ p }}</button>
           }
-          <button (click)="next()" [disabled]="page() === totalPages()">Next ›</button>
+          <button id="admin-page-next" (click)="next()" [disabled]="page() === totalPages()">Next ›</button>
         </div>
       }
     </div>

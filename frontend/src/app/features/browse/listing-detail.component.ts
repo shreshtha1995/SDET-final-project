@@ -13,31 +13,31 @@ import { StarsComponent } from '../../shared/stars.component';
   selector: 'app-listing-detail',
   imports: [CurrencyPipe, RouterLink, IconComponent, StarsComponent],
   template: `
-    <a routerLink="/browse" class="back-link">← Back to listings</a>
+    <a routerLink="/browse" class="back-link" id="detail-back-link">← Back to listings</a>
 
     @if (posting(); as p) {
-      <div class="detail">
+      <div class="detail" id="detail-container">
         <div class="gallery">
           @if (images().length) {
-            <div class="main-img" [style.background-image]="'url(' + images()[active()] + ')'"></div>
+            <div class="main-img" id="detail-main-img" [style.background-image]="'url(' + images()[active()] + ')'"></div>
             @if (images().length > 1) {
-              <div class="thumbs">
+              <div class="thumbs" id="detail-thumbs">
                 @for (img of images(); track img; let i = $index) {
-                  <div class="thumb" [class.sel]="i === active()" [style.background-image]="'url(' + img + ')'" (click)="active.set(i)"></div>
+                  <div class="thumb" [id]="'detail-thumb-' + i" [class.sel]="i === active()" [style.background-image]="'url(' + img + ')'" (click)="active.set(i)"></div>
                 }
               </div>
             }
           } @else {
-            <div class="main-img placeholder"><app-icon name="home" [size]="64" /></div>
+            <div class="main-img placeholder" id="detail-main-img"><app-icon name="home" [size]="64" /></div>
           }
         </div>
 
-        <div class="info card">
+        <div class="info card" id="detail-info">
           <div class="d-head">
-            <h1>{{ p.pgName }}</h1>
+            <h1 id="detail-pg-name">{{ p.pgName }}</h1>
             <div class="head-right">
-              <span class="badge" [class.expired]="p.status === 'EXPIRED'">{{ p.status }}</span>
-              <button class="heart-btn" [class.saved]="saved()" (click)="toggleWishlist(p.id)"
+              <span class="badge" id="detail-status" [class.expired]="p.status === 'EXPIRED'">{{ p.status }}</span>
+              <button id="detail-wishlist-btn" class="heart-btn" [class.saved]="saved()" (click)="toggleWishlist(p.id)"
                       [title]="saved() ? 'Remove from wishlist' : 'Save to wishlist'">
                 <app-icon name="heart" [filled]="saved()" [size]="22" />
               </button>
@@ -50,9 +50,9 @@ import { StarsComponent } from '../../shared/stars.component';
             <span class="badge green">{{ pgType(p.tenantPreference) }}</span>
           </div>
 
-          <div class="rent">{{ p.rentAmount | currency: 'INR' : 'symbol' : '1.0-0' }} <span class="muted">/ month</span></div>
+          <div class="rent" id="detail-rent">{{ p.rentAmount | currency: 'INR' : 'symbol' : '1.0-0' }} <span class="muted">/ month</span></div>
 
-          <div class="vacancy">
+          <div class="vacancy" id="detail-vacancy">
             <span class="muted">Vacancy</span>
             <div class="beds">
               @for (b of bedArray(p); track $index) { <app-icon name="bed" [size]="22" class="bed" [class.free]="b" /> }
@@ -82,15 +82,15 @@ import { StarsComponent } from '../../shared/stars.component';
           }
 
           <hr class="divider" />
-          <div class="contact">
-            <div><strong>{{ p.providerName }}</strong><div class="muted">Provider</div></div>
-            <div class="phone"><app-icon name="phone" [size]="18" /> {{ p.providerPhone }}</div>
+          <div class="contact" id="detail-contact">
+            <div><strong id="detail-provider-name">{{ p.providerName }}</strong><div class="muted">Provider</div></div>
+            <div class="phone" id="detail-provider-phone"><app-icon name="phone" [size]="18" /> {{ p.providerPhone }}</div>
           </div>
           <p class="muted" style="margin-top:8px">Contact the provider to coordinate and finalise offline.</p>
         </div>
       </div>
     } @else if (error()) {
-      <div class="card empty">{{ error() }}</div>
+      <div class="card empty" id="detail-error">{{ error() }}</div>
     } @else {
       <p class="muted">Loading...</p>
     }
@@ -143,6 +143,7 @@ export class ListingDetailComponent implements OnInit {
 
   toggleWishlist(id: number): void {
     if (this.saved()) {
+      console.log("clicked");
       this.wishlist.remove(id).subscribe(() => this.saved.set(false));
     } else {
       this.wishlist.add(id).subscribe(() => this.saved.set(true));

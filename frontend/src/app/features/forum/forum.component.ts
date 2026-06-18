@@ -14,47 +14,47 @@ import { IconComponent } from '../../shared/icon.component';
         <h1>Community Forum</h1>
         <p class="muted">Ask verified colleagues about cities, transport, PGs and more.</p>
       </div>
-      <button class="gradient" (click)="showAsk.set(!showAsk())">{{ showAsk() ? 'Close' : '+ Ask a question' }}</button>
+      <button id="forum-ask-toggle-btn" class="gradient" (click)="showAsk.set(!showAsk())">{{ showAsk() ? 'Close' : '+ Ask a question' }}</button>
     </div>
 
-    <div class="chips-bar">
-      <button class="chip" [class.active]="!category" (click)="setCategory(undefined)">All</button>
+    <div class="chips-bar" id="forum-category-chips">
+      <button id="forum-chip-all" class="chip" [class.active]="!category" (click)="setCategory(undefined)">All</button>
       @for (c of categories; track c) {
-        <button class="chip" [class.active]="category === c" (click)="setCategory(c)">{{ label(c) }}</button>
+        <button [id]="'forum-chip-' + c" class="chip" [class.active]="category === c" (click)="setCategory(c)">{{ label(c) }}</button>
       }
     </div>
 
     @if (showAsk()) {
-      <div class="card ask-card">
+      <div class="card ask-card" id="forum-ask-card">
         <h3>Ask the community</h3>
-        <label class="req">Title</label>
-        <input [(ngModel)]="newDoubt.title" placeholder="Short summary of your question" />
+        <label class="req" for="forum-ask-title">Title</label>
+        <input id="forum-ask-title" [(ngModel)]="newDoubt.title" placeholder="Short summary of your question" />
         @if (!category) {
-          <label class="req">Category</label>
-          <select [(ngModel)]="newDoubt.category">
+          <label class="req" for="forum-ask-category">Category</label>
+          <select id="forum-ask-category" [(ngModel)]="newDoubt.category">
             @for (c of categories; track c) { <option [ngValue]="c">{{ label(c) }}</option> }
           </select>
         } @else {
           <p class="muted">Posting under <strong>{{ label(category!) }}</strong></p>
         }
-        <label class="req">Question</label>
-        <textarea [(ngModel)]="newDoubt.content" placeholder="Describe your question..."></textarea>
-        <div style="margin-top:12px"><button class="gradient" (click)="ask()">Post question</button></div>
-        @if (error()) { <p class="error">{{ error() }}</p> }
+        <label class="req" for="forum-ask-content">Question</label>
+        <textarea id="forum-ask-content" [(ngModel)]="newDoubt.content" placeholder="Describe your question..."></textarea>
+        <div style="margin-top:12px"><button id="forum-ask-submit-btn" class="gradient" (click)="ask()">Post question</button></div>
+        @if (error()) { <p id="forum-ask-error" class="error">{{ error() }}</p> }
       </div>
     }
 
     @if (doubts().length === 0) {
-      <div class="card empty">No questions in this category yet. Be the first to ask!</div>
+      <div class="card empty" id="forum-empty">No questions in this category yet. Be the first to ask!</div>
     } @else {
       @for (d of visibleDoubts(); track d.id) {
-        <div class="card post">
+        <div class="card post" [id]="'forum-post-' + d.id">
           <span class="tag">{{ label(d.category) }}</span>
           <h3 class="q-title">{{ d.title }}</h3>
           <p class="q-body">{{ d.content }}</p>
           <div class="meta">Asked by {{ d.askedByName }} · {{ d.createdAt | date: 'medium' }}</div>
 
-          <button class="replies-toggle" (click)="toggle(d)">
+          <button class="replies-toggle" [id]="'forum-replies-toggle-' + d.id" (click)="toggle(d)">
             <app-icon name="chat" [size]="16" /> {{ d.answerCount || 0 }} {{ (d.answerCount === 1) ? 'reply' : 'replies' }}
             <span class="caret">
               <app-icon [name]="isOpen(d.id) ? 'chevron-up' : 'chevron-down'" [size]="14" />
@@ -63,9 +63,9 @@ import { IconComponent } from '../../shared/icon.component';
           </button>
 
           @if (isOpen(d.id)) {
-            <div class="comments">
+            <div class="comments" [id]="'forum-comments-' + d.id">
               @for (a of answers()[d.id] || []; track a.id) {
-                <div class="comment">
+                <div class="comment" [id]="'forum-comment-' + a.id">
                   <span class="c-avatar">{{ initials(a.answeredByName) }}</span>
                   <div class="c-body">
                     <div class="c-head"><strong>{{ a.answeredByName }}</strong>
@@ -77,8 +77,8 @@ import { IconComponent } from '../../shared/icon.component';
                 <p class="muted no-c">No replies yet — start the conversation.</p>
               }
               <div class="reply-box">
-                <input [(ngModel)]="replyText[d.id]" placeholder="Add a reply..." (keyup.enter)="reply(d)" />
-                <button class="gradient" (click)="reply(d)">Reply</button>
+                <input [id]="'forum-reply-input-' + d.id" [(ngModel)]="replyText[d.id]" placeholder="Add a reply..." (keyup.enter)="reply(d)" />
+                <button class="gradient" [id]="'forum-reply-btn-' + d.id" (click)="reply(d)">Reply</button>
               </div>
             </div>
           }
@@ -87,7 +87,7 @@ import { IconComponent } from '../../shared/icon.component';
 
       @if (visible() < doubts().length) {
         <div class="center" style="margin-top:8px">
-          <button class="secondary" (click)="visible.set(visible() + pageSize)">Load more questions ({{ doubts().length - visible() }} more)</button>
+          <button id="forum-load-more-btn" class="secondary" (click)="visible.set(visible() + pageSize)">Load more questions ({{ doubts().length - visible() }} more)</button>
         </div>
       }
     }
