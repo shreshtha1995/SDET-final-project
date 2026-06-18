@@ -43,9 +43,9 @@ import { IconComponent } from '../../shared/icon.component';
           <button id="signup-step1-continue-btn" class="full-width gradient" style="margin-top:18px" [disabled]="!role()" (click)="step.set(2)">Continue</button>
 
         } @else if (step() === 2) {
-          <p class="muted">Step 2 — Verify your {{ role() === 'EMPLOYEE' ? 'Employee' : 'Candidate' }} ID.</p>
-          <label class="req" for="signup-cognizant-id">{{ role() === 'EMPLOYEE' ? 'Employee' : 'Candidate' }} ID</label>
-          <input id="signup-cognizant-id" [(ngModel)]="cognizantId" [placeholder]="role() === 'EMPLOYEE' ? 'Enter your CTS ID' : 'Enter your candidate ID'" (keyup.enter)="verify()" />
+          <p class="muted">Step 2 — Verify your {{ role() === 'EMPLOYEE' ? 'Employee' : 'New Joinee' }} ID.</p>
+          <label class="req" for="signup-cognizant-id">{{ role() === 'EMPLOYEE' ? 'Employee' : 'New Joinee' }} ID</label>
+          <input id="signup-cognizant-id" [(ngModel)]="cognizantId" [placeholder]="role() === 'EMPLOYEE' ? 'Enter your CTS ID' : 'Enter your joining ID'" (keyup.enter)="verify()" />
           <button id="signup-verify-btn" class="full-width gradient" style="margin-top:16px" [disabled]="loading()" (click)="verify()">
             {{ loading() ? 'Verifying...' : 'Verify ID' }}
           </button>
@@ -224,11 +224,22 @@ export class SignupComponent {
 
   verify(): void {
     this.error.set('');
-    if (!this.cognizantId.trim()) { this.error.set('Please enter your ID.'); return; }
+    const id = this.cognizantId.trim().toUpperCase();
+    if (!id) { this.error.set('Please enter your ID.'); return; }
+    if (!this.role()) { this.error.set('Please choose Employee or New Joinee first.'); this.step.set(1); return; }
+    this.cognizantId = id;
     this.loading.set(true);
-    this.auth.verifyId(this.cognizantId.trim()).subscribe({
+    this.auth.verifyId(id).subscribe({
       next: (res) => {
         this.loading.set(false);
+        if (!res.valid) {
+          this.error.set(res.message || 'ID verification failed.');
+          return;
+        }
+        if (!res.idType) {
+          this.error.set('ID verification failed. Please try again.');
+          return;
+        }
         if (res.idType !== this.role()) {
           this.error.set(`This ID is registered as a ${res.idType === 'EMPLOYEE' ? 'current employee' : 'new joinee'} ID. Go back and pick the correct option.`);
           return;
@@ -247,7 +258,7 @@ export class SignupComponent {
       return;
     }
     const request: SignupRequest = {
-      cognizantId: this.cognizantId.trim(),
+      cognizantId: this.cognizantId.trim().toUpperCase(),
       name: this.name.trim(),
       email: this.email.trim(),
       phoneNumber: this.phoneNumber.trim(),

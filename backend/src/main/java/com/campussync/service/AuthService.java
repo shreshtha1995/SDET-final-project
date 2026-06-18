@@ -55,7 +55,8 @@ public class AuthService {
      * when the ID is unknown or has already been used to create an account.
      */
     public VerifyIdResponse verifyId(VerifyIdRequest request) {
-        var entry = directoryRepository.findByCognizantId(request.cognizantId());
+        String cognizantId = request.cognizantId().trim().toUpperCase();
+        var entry = directoryRepository.findByCognizantId(cognizantId);
         if (entry.isEmpty()) {
             return new VerifyIdResponse(false, null, "This Cognizant ID is not in the company directory.");
         }
@@ -74,7 +75,8 @@ public class AuthService {
      */
     @Transactional
     public AuthResponse signup(SignupRequest request) {
-        CompanyDirectory directory = directoryRepository.findByCognizantId(request.cognizantId())
+        String cognizantId = request.cognizantId().trim().toUpperCase();
+        CompanyDirectory directory = directoryRepository.findByCognizantId(cognizantId)
                 .orElseThrow(() -> ApiException.badRequest("This Cognizant ID is not in the company directory."));
 
         if (directory.isRegistered()) {
