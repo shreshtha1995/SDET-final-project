@@ -20,32 +20,32 @@ import { StarsComponent } from '../../shared/stars.component';
       </div>
     </div>
 
-    <div class="toolbar">
+    <div class="toolbar" id="browse-toolbar">
       <div>
-        <label>City</label>
-        <select [(ngModel)]="city" (change)="area = ''; load()">
+        <label for="browse-filter-city">City</label>
+        <select id="browse-filter-city" [(ngModel)]="city" (change)="area = ''; load()">
           <option [ngValue]="''">All cities</option>
           @for (c of cities; track c) { <option [ngValue]="c">{{ c }}</option> }
         </select>
       </div>
       <div>
-        <label>Area</label>
-        <select [(ngModel)]="area" (change)="load()" [disabled]="!city">
+        <label for="browse-filter-area">Area</label>
+        <select id="browse-filter-area" [(ngModel)]="area" (change)="load()" [disabled]="!city">
           <option [ngValue]="''">All areas</option>
           @for (a of areas(); track a) { <option [ngValue]="a">{{ a }}</option> }
         </select>
       </div>
       <div>
-        <label>Sharing</label>
-        <select [(ngModel)]="sharingType" (change)="load()">
+        <label for="browse-filter-sharing">Sharing</label>
+        <select id="browse-filter-sharing" [(ngModel)]="sharingType" (change)="load()">
           <option [ngValue]="undefined">Any</option>
           <option value="DOUBLE">Double</option>
           <option value="TRIPLE">Triple</option>
         </select>
       </div>
       <div>
-        <label>PG Type</label>
-        <select [(ngModel)]="tenantPreference" (change)="load()">
+        <label for="browse-filter-pgtype">PG Type</label>
+        <select id="browse-filter-pgtype" [(ngModel)]="tenantPreference" (change)="load()">
           <option [ngValue]="undefined">Any</option>
           <option value="ANYONE">Co-Living</option>
           @if (auth.user()?.gender === 'MALE') { <option value="MALE_ONLY">Gents</option> }
@@ -57,11 +57,11 @@ import { StarsComponent } from '../../shared/stars.component';
     @if (loading()) {
       <p class="muted">Loading...</p>
     } @else if (listings().length === 0) {
-      <div class="card empty">No matching rooms found. Try adjusting the filters.</div>
+      <div class="card empty" id="browse-empty">No matching rooms found. Try adjusting the filters.</div>
     } @else {
-      <div class="grid">
+      <div class="grid" id="browse-grid">
         @for (p of listings(); track p.id) {
-          <div class="card pg-card" (click)="open(p.id)">
+          <div class="card pg-card" [id]="'browse-card-' + p.id" (click)="open(p.id)">
             <div class="photo" [class.placeholder]="!p.imageUrls.length"
                  [style.background-image]="p.imageUrls.length ? 'url(' + imgUrl(p.imageUrls[0]) + ')' : ''">
               @if (!p.imageUrls.length) { <app-icon name="home" [size]="44" /> }
@@ -79,7 +79,7 @@ import { StarsComponent } from '../../shared/stars.component';
               } @else {
                 <div class="muted">New listing · no reviews yet</div>
               }
-              <button class="view-btn">View details <app-icon name="arrow-right" [size]="16" /></button>
+              <button class="view-btn" [id]="'browse-view-btn-' + p.id">View details <app-icon name="arrow-right" [size]="16" /></button>
             </div>
           </div>
         }

@@ -15,8 +15,8 @@ import { IconComponent } from '../../shared/icon.component';
     <header class="landing-nav">
       <span class="brand-lg">CampusSync</span>
       <div class="nav-actions">
-        <button class="outline" (click)="go('/login')">Sign in</button>
-        <button (click)="start()">Get Started</button>
+        <button id="landing-signin-btn" class="outline" (click)="go('/login')">Sign in</button>
+        <button id="landing-getstarted-nav-btn" (click)="start()">Get Started</button>
       </div>
     </header>
 
@@ -29,8 +29,8 @@ import { IconComponent } from '../../shared/icon.component';
           Cognizant employees and new joinees — every flatmate is a genuine colleague, and every review is real.
         </p>
         <div class="cta">
-          <button (click)="start()">Get Started <app-icon name="arrow-right" [size]="18" /></button>
-          <button class="outline" (click)="go('/login')">I have an account</button>
+          <button id="landing-getstarted-hero-btn" (click)="start()">Get Started <app-icon name="arrow-right" [size]="18" /></button>
+          <button id="landing-haveaccount-btn" class="outline" (click)="go('/login')">I have an account</button>
         </div>
         <div class="trust">
           <span><app-icon name="check-circle" [size]="16" /> ID-verified</span>
@@ -73,7 +73,7 @@ import { IconComponent } from '../../shared/icon.component';
           <li><span class="num">3</span><div><h3>Connect offline</h3><p>Get the provider's number and finalise with confidence.</p></div></li>
         </ol>
         <div class="cta">
-          <button (click)="start()">Get Started <app-icon name="arrow-right" [size]="18" /></button>
+          <button id="landing-getstarted-steps-btn" (click)="start()">Get Started <app-icon name="arrow-right" [size]="18" /></button>
         </div>
       </section>
     </article>

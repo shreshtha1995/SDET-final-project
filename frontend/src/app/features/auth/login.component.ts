@@ -8,7 +8,7 @@ import { IconComponent } from '../../shared/icon.component';
   selector: 'app-login',
   imports: [FormsModule, RouterLink, IconComponent],
   template: `
-    <div class="auth-split">
+    <div class="auth-split" id="login-page">
       <!-- Left: the sign-in form -->
       <div class="auth-form-side">
         <div class="auth-form-card">
@@ -16,22 +16,22 @@ import { IconComponent } from '../../shared/icon.component';
           <h1 class="auth-h1">Sign in</h1>
           <p class="muted">Verified co-living for Cognizant employees. Sign in to continue.</p>
 
-          <label>Email</label>
-          <input type="email" [(ngModel)]="email" name="loginEmail" autocomplete="off" placeholder="you@cognizant.com" />
+          <label for="login-email">Email</label>
+          <input id="login-email" type="email" [(ngModel)]="email" name="loginEmail" autocomplete="off" placeholder="you@cognizant.com" />
 
-          <label>Password</label>
-          <input type="password" [(ngModel)]="password" name="loginPwd" autocomplete="new-password" (keyup.enter)="login()" />
+          <label for="login-password">Password</label>
+          <input id="login-password" type="password" [(ngModel)]="password" name="loginPwd" autocomplete="new-password" (keyup.enter)="login()" />
 
-          <button class="full-width" style="margin-top:18px" [disabled]="loading()" (click)="login()">
+          <button id="login-submit-btn" class="full-width" style="margin-top:18px" [disabled]="loading()" (click)="login()">
             {{ loading() ? 'Signing in...' : 'Sign in' }}
           </button>
 
-          @if (error()) { <p class="error">{{ error() }}</p> }
+          @if (error()) { <p id="login-error" class="error">{{ error() }}</p> }
 
           <p class="muted" style="margin-top:18px">
-            New joinee? <a routerLink="/signup">Create an account</a>
+            New joinee? <a id="login-signup-link" routerLink="/signup">Create an account</a>
           </p>
-          <p style="margin-top:6px"><a routerLink="/">← Back to home</a></p>
+          <p style="margin-top:6px"><a id="login-home-link" routerLink="/">← Back to home</a></p>
         </div>
       </div>
 
