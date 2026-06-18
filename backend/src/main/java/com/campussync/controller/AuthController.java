@@ -41,6 +41,7 @@ public class AuthController {
     /** Authenticate an existing user and return a JWT. */
     @PostMapping("/login")
     public AuthResponse login(@Valid @RequestBody LoginRequest request) {
+        System.out.println("Login attempt for email: " + request.email());
         return authService.login(request);
     }
 }

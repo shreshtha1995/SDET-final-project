@@ -41,7 +41,7 @@ public class PostingQueryService {
                                         String officeCampus, TenantPreference tenantPreference) {
         User me = currentUserService.get();
         return postingRepository.search(
-                        PostingStatus.AVAILABLE, me.getGender(), sharingType,
+                        PostingStatus.AVAILABLE, me.getGender(), me.getId(), sharingType,
                         support.blankToNull(cityPrefix), support.blankToNull(officeCampus), tenantPreference)
                 .stream()
                 .map(PostingResponse::from)
