@@ -2,8 +2,9 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Posting, SharingType, TenantPreference } from '../../models/models';
+import { apiUrl } from '../../core/api.config';
 
-const API = 'http://localhost:8081/api/postings';
+const API = apiUrl('/api/postings');
 
 /** Listing discovery / browse — read side of the posting contract. */
 @Injectable({ providedIn: 'root' })

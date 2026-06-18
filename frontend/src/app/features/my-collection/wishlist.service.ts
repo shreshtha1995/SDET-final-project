@@ -2,8 +2,9 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Posting } from '../../models/models';
+import { apiUrl } from '../../core/api.config';
 
-const API = 'http://localhost:8081/api/wishlist';
+const API = apiUrl('/api/wishlist');
 
 @Injectable({ providedIn: 'root' })
 export class WishlistService {

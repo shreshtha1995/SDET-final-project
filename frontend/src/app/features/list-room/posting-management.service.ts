@@ -2,8 +2,9 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CreatePostingRequest, Posting } from '../../models/models';
+import { apiUrl } from '../../core/api.config';
 
-const API = 'http://localhost:8081/api/postings';
+const API = apiUrl('/api/postings');
 
 /** Listing creation, editing, image upload and re-confirmation — write side of the posting contract. */
 @Injectable({ providedIn: 'root' })

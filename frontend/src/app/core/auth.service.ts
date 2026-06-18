@@ -2,9 +2,10 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { AuthResponse, Profile, SignupRequest, VerifyIdResponse } from '../models/models';
+import { apiUrl } from './api.config';
 
-const API = 'http://localhost:8081/api/auth';
-const USERS_API = 'http://localhost:8081/api/users';
+const API = apiUrl('/api/auth');
+const USERS_API = apiUrl('/api/users');
 const STORAGE_KEY = 'campusSyncAuth';
 
 /**

@@ -1,3 +1,5 @@
+import { API_ORIGIN as CONFIG_API_ORIGIN } from '../core/api.config';
+
 // Office locations as a city -> areas cascade.
 // office_campus is stored as "City - Area" (e.g. "Chennai - Siruseri").
 
@@ -14,4 +16,4 @@ export function toCampus(city: string, area: string): string {
   return `${city} - ${area}`;
 }
 
-export const API_ORIGIN = 'http://localhost:8081';
+export const API_ORIGIN = CONFIG_API_ORIGIN;
