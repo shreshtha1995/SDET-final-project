@@ -44,7 +44,7 @@ public class PostingManagementController {
     }
     //to edit a listing
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public PostingResponse editPosting(@PathVariable Long id, @Valid @RequestBody CreatePostingRequest request){
         return postingManagementService.update(id,request);
     }
