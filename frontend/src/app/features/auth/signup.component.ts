@@ -69,21 +69,42 @@ import { IconComponent } from '../../shared/icon.component';
           @if (phoneRef.invalid && phoneRef.touched) { <div class="field-error">Phone must be exactly 10 digits.</div> }
 
           <label class="req">Gender</label>
-          <select [(ngModel)]="gender" name="gender">
-            <option value="MALE">Male</option>
-            <option value="FEMALE">Female</option>
-          </select>
+          <div class="gender-radios" role="radiogroup" aria-label="Gender">
+            <label class="gender-radio" [class.checked]="gender === 'MALE'">
+              <input type="radio" [(ngModel)]="gender" name="gender" value="MALE" />
+              <span class="dot"></span>
+              <span class="lbl">Male</span>
+            </label>
+            <label class="gender-radio" [class.checked]="gender === 'FEMALE'">
+              <input type="radio" [(ngModel)]="gender" name="gender" value="FEMALE" />
+              <span class="dot"></span>
+              <span class="lbl">Female</span>
+            </label>
+          </div>
+          @if (triedSubmit() && !gender) { <div class="field-error">Please select your gender.</div> }
 
           <label class="req">Password</label>
-          <input type="password" [(ngModel)]="password" #pwdRef="ngModel" name="pwd" required minlength="6"
-                 pattern="\\S+" [class.invalid]="pwdRef.invalid && pwdRef.touched" />
+          <div class="pwd-wrap">
+            <input [type]="showPwd() ? 'text' : 'password'" [(ngModel)]="password" #pwdRef="ngModel" name="pwd" required minlength="6"
+                   pattern="\\S+" [class.invalid]="pwdRef.invalid && pwdRef.touched" />
+            <button type="button" class="pwd-toggle" (click)="showPwd.set(!showPwd())"
+                    [attr.aria-label]="showPwd() ? 'Hide password' : 'Show password'" tabindex="-1">
+              <app-icon [name]="showPwd() ? 'eye-off' : 'eye'" [size]="18" />
+            </button>
+          </div>
           @if (pwdRef.touched && pwdRef.errors?.['required']) { <div class="field-error">Password is required.</div> }
           @else if (pwdRef.touched && pwdRef.errors?.['minlength']) { <div class="field-error">At least 6 characters.</div> }
           @else if (pwdRef.touched && pwdRef.errors?.['pattern']) { <div class="field-error">Password cannot contain spaces.</div> }
 
           <label class="req">Confirm password</label>
-          <input type="password" [(ngModel)]="confirmPassword" #cpwdRef="ngModel" name="cpwd" required
-                 [class.invalid]="cpwdRef.touched && confirmPassword !== password" />
+          <div class="pwd-wrap">
+            <input [type]="showConfirm() ? 'text' : 'password'" [(ngModel)]="confirmPassword" #cpwdRef="ngModel" name="cpwd" required
+                   [class.invalid]="cpwdRef.touched && confirmPassword !== password" />
+            <button type="button" class="pwd-toggle" (click)="showConfirm.set(!showConfirm())"
+                    [attr.aria-label]="showConfirm() ? 'Hide password' : 'Show password'" tabindex="-1">
+              <app-icon [name]="showConfirm() ? 'eye-off' : 'eye'" [size]="18" />
+            </button>
+          </div>
           @if (cpwdRef.touched && confirmPassword !== password) { <div class="field-error">Passwords do not match.</div> }
 
           <button class="full-width gradient" style="margin-top:18px" [disabled]="loading()" (click)="register()">
@@ -118,7 +139,68 @@ import { IconComponent } from '../../shared/icon.component';
         </div>
       </div>
     </div>
-  `
+  `,
+  styles: [`
+    .gender-radios {
+      display: flex;
+      gap: 10px;
+      margin-top: 5px;
+    }
+    .gender-radio {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 13px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--field);
+      cursor: pointer;
+      user-select: none;
+      transition: border-color var(--t), background var(--t);
+    }
+    .gender-radio:hover { border-color: color-mix(in srgb, var(--brand) 40%, var(--border)); }
+    .gender-radio.checked { border-color: var(--brand); background: var(--brand-soft); }
+    .gender-radio input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .gender-radio .dot {
+      flex: 0 0 auto;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      position: relative;
+      transition: border-color var(--t);
+    }
+    .gender-radio.checked .dot { border-color: var(--brand); }
+    .gender-radio.checked .dot::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border-radius: 50%;
+      background: var(--brand);
+    }
+    .gender-radio .lbl { font-size: 14px; color: var(--text); }
+    .gender-radio.checked .lbl { color: var(--brand); }
+    .pwd-wrap { position: relative; display: flex; align-items: center; }
+    .pwd-wrap input { padding-right: 44px; }
+    .pwd-toggle {
+      position: absolute;
+      right: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      border-radius: 8px;
+      transition: color var(--t), background var(--t);
+    }
+    .pwd-toggle:hover { color: var(--brand); background: var(--brand-soft); }
+  `]
 })
 export class SignupComponent {
   private auth = inject(AuthService);
@@ -128,12 +210,15 @@ export class SignupComponent {
   role = signal<IdType | null>(null);
   loading = signal(false);
   error = signal('');
+  triedSubmit = signal(false);
+  showPwd = signal(false);
+  showConfirm = signal(false);
 
   cognizantId = '';
   name = '';
   email = '';
   phoneNumber = '';
-  gender: Gender = 'MALE';
+  gender: Gender | '' = '';
   password = '';
   confirmPassword = '';
 
@@ -156,6 +241,7 @@ export class SignupComponent {
 
   register(): void {
     this.error.set('');
+    this.triedSubmit.set(true);
     if (!this.formValid()) {
       this.error.set('Please fix the highlighted fields before submitting.');
       return;
@@ -165,7 +251,7 @@ export class SignupComponent {
       name: this.name.trim(),
       email: this.email.trim(),
       phoneNumber: this.phoneNumber.trim(),
-      gender: this.gender,
+      gender: this.gender as Gender,
       password: this.password
     };
     this.loading.set(true);
@@ -179,7 +265,7 @@ export class SignupComponent {
     const phoneOk = /^\d{10}$/.test(this.phoneNumber.trim());
     const emailOk = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(this.email.trim());
     const pwdOk = this.password.length >= 6 && !/\s/.test(this.password);
-    return !!this.name.trim() && emailOk && phoneOk && pwdOk && this.password === this.confirmPassword;
+    return !!this.name.trim() && emailOk && phoneOk && !!this.gender && pwdOk && this.password === this.confirmPassword;
   }
 
   private readError(err: any): string {

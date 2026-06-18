@@ -20,7 +20,13 @@ import { IconComponent } from '../../shared/icon.component';
           <input type="email" [(ngModel)]="email" name="loginEmail" autocomplete="off" placeholder="you@cognizant.com" />
 
           <label>Password</label>
-          <input type="password" [(ngModel)]="password" name="loginPwd" autocomplete="new-password" (keyup.enter)="login()" />
+          <div class="pwd-wrap">
+            <input [type]="showPwd() ? 'text' : 'password'" [(ngModel)]="password" name="loginPwd" autocomplete="new-password" (keyup.enter)="login()" />
+            <button type="button" class="pwd-toggle" (click)="showPwd.set(!showPwd())"
+                    [attr.aria-label]="showPwd() ? 'Hide password' : 'Show password'" tabindex="-1">
+              <app-icon [name]="showPwd() ? 'eye-off' : 'eye'" [size]="18" />
+            </button>
+          </div>
 
           <button class="full-width" style="margin-top:18px" [disabled]="loading()" (click)="login()">
             {{ loading() ? 'Signing in...' : 'Sign in' }}
@@ -56,7 +62,28 @@ import { IconComponent } from '../../shared/icon.component';
         </div>
       </div>
     </div>
-  `
+  `,
+  styles: [`
+    .pwd-wrap { position: relative; display: flex; align-items: center; }
+    .pwd-wrap input { padding-right: 44px; }
+    .pwd-toggle {
+      position: absolute;
+      right: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      border-radius: 8px;
+      transition: color var(--t), background var(--t);
+    }
+    .pwd-toggle:hover { color: var(--brand); background: var(--brand-soft); }
+  `]
 })
 export class LoginComponent implements OnInit {
   private auth = inject(AuthService);
@@ -66,6 +93,7 @@ export class LoginComponent implements OnInit {
   password = '';
   loading = signal(false);
   error = signal('');
+  showPwd = signal(false);
 
   /**
    * Security fix: arriving on the login page always clears any existing session,
