@@ -24,6 +24,7 @@ public interface PostingRepository extends JpaRepository<Posting, Long> {
             SELECT p FROM Posting p
             WHERE p.status = :status
               AND p.postedBy.gender = :gender
+              AND p.postedBy.id != :userId
               AND (:sharingType IS NULL OR p.sharingType = :sharingType)
               AND (:cityPrefix IS NULL OR p.officeCampus LIKE CONCAT(:cityPrefix, '%'))
               AND (:officeCampus IS NULL OR p.officeCampus = :officeCampus)
@@ -32,6 +33,7 @@ public interface PostingRepository extends JpaRepository<Posting, Long> {
             """)
     List<Posting> search(@Param("status") PostingStatus status,
                          @Param("gender") Gender gender,
+                         @Param("userId") Long userId,
                          @Param("sharingType") SharingType sharingType,
                          @Param("cityPrefix") String cityPrefix,
                          @Param("officeCampus") String officeCampus,

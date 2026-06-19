@@ -32,6 +32,8 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<AuthResponse> {
+    console.log("tihs is login from frontend ++++++++++====================================");
+    
     return this.http.post<AuthResponse>(`${API}/login`, { email, password }).pipe(tap((res) => this.store(res)));
   }
 

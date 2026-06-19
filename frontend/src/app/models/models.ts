@@ -48,7 +48,7 @@ export interface UserSummary {
 
 export interface VerifyIdResponse {
   valid: boolean;
-  idType: IdType;
+  idType: IdType | null;
   message: string;
 }
 

@@ -15,7 +15,7 @@ import { IconComponent } from '../../shared/icon.component';
   selector: 'app-signup',
   imports: [FormsModule, RouterLink, IconComponent],
   template: `
-    <div class="auth-split">
+    <div class="auth-split" id="signup-page">
       <!-- Left: the onboarding form -->
       <div class="auth-form-side">
         <div class="auth-form-card">
@@ -31,40 +31,40 @@ import { IconComponent } from '../../shared/icon.component';
         @if (step() === 1) {
           <p class="muted">Step 1 — Are you a current employee or a new joinee?</p>
           <div class="choices">
-            <div class="choice" [class.selected]="role() === 'EMPLOYEE'" (click)="role.set('EMPLOYEE')">
+            <div id="signup-role-employee" class="choice" [class.selected]="role() === 'EMPLOYEE'" (click)="role.set('EMPLOYEE')">
               <div class="ic"><app-icon name="briefcase" [size]="30" /></div><div class="t">Current Employee</div>
               <div class="muted">I already work at Cognizant</div>
             </div>
-            <div class="choice" [class.selected]="role() === 'CANDIDATE'" (click)="role.set('CANDIDATE')">
+            <div id="signup-role-candidate" class="choice" [class.selected]="role() === 'CANDIDATE'" (click)="role.set('CANDIDATE')">
               <div class="ic"><app-icon name="cap" [size]="30" /></div><div class="t">New Joinee</div>
               <div class="muted">I have an offer / candidate ID</div>
             </div>
           </div>
-          <button class="full-width gradient" style="margin-top:18px" [disabled]="!role()" (click)="step.set(2)">Continue</button>
+          <button id="signup-step1-continue-btn" class="full-width gradient" style="margin-top:18px" [disabled]="!role()" (click)="step.set(2)">Continue</button>
 
         } @else if (step() === 2) {
-          <p class="muted">Step 2 — Verify your {{ role() === 'EMPLOYEE' ? 'Employee' : 'Candidate' }} ID.</p>
-          <label class="req">{{ role() === 'EMPLOYEE' ? 'Employee' : 'Candidate' }} ID</label>
-          <input [(ngModel)]="cognizantId" [placeholder]="role() === 'EMPLOYEE' ? 'Enter your CTS ID' : 'Enter your candidate ID'" (keyup.enter)="verify()" />
-          <button class="full-width gradient" style="margin-top:16px" [disabled]="loading()" (click)="verify()">
+          <p class="muted">Step 2 — Verify your {{ role() === 'EMPLOYEE' ? 'Employee' : 'New Joinee' }} ID.</p>
+          <label class="req" for="signup-cognizant-id">{{ role() === 'EMPLOYEE' ? 'Employee' : 'New Joinee' }} ID</label>
+          <input id="signup-cognizant-id" [(ngModel)]="cognizantId" [placeholder]="role() === 'EMPLOYEE' ? 'Enter your CTS ID' : 'Enter your joining ID'" (keyup.enter)="verify()" />
+          <button id="signup-verify-btn" class="full-width gradient" style="margin-top:16px" [disabled]="loading()" (click)="verify()">
             {{ loading() ? 'Verifying...' : 'Verify ID' }}
           </button>
-          <button class="link" style="margin-top:12px" (click)="step.set(1)">← Back</button>
+          <button id="signup-back-btn" class="link" style="margin-top:12px" (click)="step.set(1)">← Back</button>
 
         } @else {
           <p class="success">✓ ID {{ cognizantId }} verified. Step 3 — your details.</p>
 
-          <label class="req">Full name</label>
-          <input [(ngModel)]="name" #nameRef="ngModel" name="name" required [class.invalid]="nameRef.invalid && nameRef.touched" />
+          <label class="req" for="signup-name">Full name</label>
+          <input id="signup-name" [(ngModel)]="name" #nameRef="ngModel" name="name" required [class.invalid]="nameRef.invalid && nameRef.touched" />
           @if (nameRef.invalid && nameRef.touched) { <div class="field-error">Name is required.</div> }
 
-          <label class="req">Email</label>
-          <input type="email" [(ngModel)]="email" #emailRef="ngModel" name="email" required email
+          <label class="req" for="signup-email">Email</label>
+          <input id="signup-email" type="email" [(ngModel)]="email" #emailRef="ngModel" name="email" required email
                  placeholder="you@cognizant.com" [class.invalid]="emailRef.invalid && emailRef.touched" />
           @if (emailRef.invalid && emailRef.touched) { <div class="field-error">Enter a valid email.</div> }
 
-          <label class="req">Phone number</label>
-          <input [(ngModel)]="phoneNumber" #phoneRef="ngModel" name="phone" required pattern="\\d{10}"
+          <label class="req" for="signup-phone">Phone number</label>
+          <input id="signup-phone" [(ngModel)]="phoneNumber" #phoneRef="ngModel" name="phone" required pattern="\\d{10}"
                  maxlength="10" placeholder="10 digits" [class.invalid]="phoneRef.invalid && phoneRef.touched" />
           @if (phoneRef.invalid && phoneRef.touched) { <div class="field-error">Phone must be exactly 10 digits.</div> }
 
@@ -107,14 +107,14 @@ import { IconComponent } from '../../shared/icon.component';
           </div>
           @if (cpwdRef.touched && confirmPassword !== password) { <div class="field-error">Passwords do not match.</div> }
 
-          <button class="full-width gradient" style="margin-top:18px" [disabled]="loading()" (click)="register()">
+          <button id="signup-submit-btn" class="full-width gradient" style="margin-top:18px" [disabled]="loading()" (click)="register()">
             {{ loading() ? 'Creating account...' : 'Create account' }}
           </button>
         }
 
-        @if (error()) { <p class="error">{{ error() }}</p> }
-        <p class="muted" style="margin-top:18px">Already have an account? <a routerLink="/login">Sign in</a></p>
-        <p style="margin-top:6px"><a routerLink="/">← Back to home</a></p>
+        @if (error()) { <p id="signup-error" class="error">{{ error() }}</p> }
+        <p class="muted" style="margin-top:18px">Already have an account? <a id="signup-login-link" routerLink="/login">Sign in</a></p>
+        <p style="margin-top:6px"><a id="signup-home-link" routerLink="/">← Back to home</a></p>
         </div>
       </div>
 
@@ -224,11 +224,22 @@ export class SignupComponent {
 
   verify(): void {
     this.error.set('');
-    if (!this.cognizantId.trim()) { this.error.set('Please enter your ID.'); return; }
+    const id = this.cognizantId.trim().toUpperCase();
+    if (!id) { this.error.set('Please enter your ID.'); return; }
+    if (!this.role()) { this.error.set('Please choose Employee or New Joinee first.'); this.step.set(1); return; }
+    this.cognizantId = id;
     this.loading.set(true);
-    this.auth.verifyId(this.cognizantId.trim()).subscribe({
+    this.auth.verifyId(id).subscribe({
       next: (res) => {
         this.loading.set(false);
+        if (!res.valid) {
+          this.error.set(res.message || 'ID verification failed.');
+          return;
+        }
+        if (!res.idType) {
+          this.error.set('ID verification failed. Please try again.');
+          return;
+        }
         if (res.idType !== this.role()) {
           this.error.set(`This ID is registered as a ${res.idType === 'EMPLOYEE' ? 'current employee' : 'new joinee'} ID. Go back and pick the correct option.`);
           return;
@@ -247,7 +258,7 @@ export class SignupComponent {
       return;
     }
     const request: SignupRequest = {
-      cognizantId: this.cognizantId.trim(),
+      cognizantId: this.cognizantId.trim().toUpperCase(),
       name: this.name.trim(),
       email: this.email.trim(),
       phoneNumber: this.phoneNumber.trim(),

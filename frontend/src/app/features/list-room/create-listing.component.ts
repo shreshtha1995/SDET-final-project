@@ -22,23 +22,23 @@ interface Picked { file: File; preview: string; }
         : 'Share your vacant bed. Fields marked * are required.' }}
     </p>
 
-    <div class="card form-card">
-      <label class="req">PG / Property name</label>
-      <input [(ngModel)]="form.pgName" [class.invalid]="showErr() && !form.pgName" />
+    <div class="card form-card" id="create-listing-card">
+      <label class="req" for="create-pg-name">PG / Property name</label>
+      <input id="create-pg-name" [(ngModel)]="form.pgName" [class.invalid]="showErr() && !form.pgName" />
 
-      <label class="req">Locality &amp; landmark</label>
-      <input [(ngModel)]="form.localityAndLandmark" placeholder="e.g. near SIPCOT" [class.invalid]="showErr() && !form.localityAndLandmark" />
+      <label class="req" for="create-locality">Locality &amp; landmark</label>
+      <input id="create-locality" [(ngModel)]="form.localityAndLandmark" placeholder="e.g. near SIPCOT" [class.invalid]="showErr() && !form.localityAndLandmark" />
 
       <div class="row">
         <div>
-          <label class="req">City</label>
-          <select [(ngModel)]="city" (change)="area = ''">
+          <label class="req" for="create-city">City</label>
+          <select id="create-city" [(ngModel)]="city" (change)="area = ''">
             @for (c of cities; track c) { <option [ngValue]="c">{{ c }}</option> }
           </select>
         </div>
         <div>
-          <label class="req">Office area</label>
-          <select [(ngModel)]="area" [class.invalid]="showErr() && !area">
+          <label class="req" for="create-area">Office area</label>
+          <select id="create-area" [(ngModel)]="area" [class.invalid]="showErr() && !area">
             <option value="" disabled>Select area</option>
             @for (a of areas(); track a) { <option [ngValue]="a">{{ a }}</option> }
           </select>
@@ -47,22 +47,22 @@ interface Picked { file: File; preview: string; }
 
       <div class="row">
         <div>
-          <label class="req">Sharing type</label>
-          <select [(ngModel)]="form.sharingType" (change)="clampBeds()">
+          <label class="req" for="create-sharing-type">Sharing type</label>
+          <select id="create-sharing-type" [(ngModel)]="form.sharingType" (change)="clampBeds()">
             <option value="DOUBLE">Double (2 beds)</option>
             <option value="TRIPLE">Triple (3 beds)</option>
             <option value="FOUR">4 Sharing (4 beds)</option>
           </select>
         </div>
         <div>
-          <label class="req">Vacant beds</label>
-          <select [(ngModel)]="form.availableBeds">
+          <label class="req" for="create-available-beds">Vacant beds</label>
+          <select id="create-available-beds" [(ngModel)]="form.availableBeds">
             @for (n of bedOptions(); track n) { <option [ngValue]="n">{{ n }} of {{ totalBeds() }}</option> }
           </select>
         </div>
         <div>
-          <label class="req">PG Type</label>
-          <select [(ngModel)]="form.tenantPreference">
+          <label class="req" for="create-pg-type">PG Type</label>
+          <select id="create-pg-type" [(ngModel)]="form.tenantPreference">
             @if (gender() === 'MALE') { <option value="MALE_ONLY">Gents PG (male only)</option> }
             @if (gender() === 'FEMALE') { <option value="FEMALE_ONLY">Ladies PG (female only)</option> }
             <option value="ANYONE">Co-Living PG (anyone)</option>
@@ -70,58 +70,58 @@ interface Picked { file: File; preview: string; }
         </div>
       </div>
 
-      <label class="req">Rent (₹ / month)</label>
-      <input type="number" [(ngModel)]="form.rentAmount" min="1" [class.invalid]="showErr() && form.rentAmount <= 0" />
+      <label class="req" for="create-rent">Rent (₹ / month)</label>
+      <input id="create-rent" type="number" [(ngModel)]="form.rentAmount" min="1" [class.invalid]="showErr() && form.rentAmount <= 0" />
 
       @if (!isCandidate()) {
         <div class="row">
           <div>
-            <label class="req">Food rating</label>
-            <select [(ngModel)]="form.foodRating">
+            <label class="req" for="create-food-rating">Food rating</label>
+            <select id="create-food-rating" [(ngModel)]="form.foodRating">
               @for (n of [1,2,3,4,5]; track n) { <option [ngValue]="n">{{ n }} ★</option> }
             </select>
           </div>
           <div>
-            <label class="req">Service rating</label>
-            <select [(ngModel)]="form.serviceRating">
+            <label class="req" for="create-service-rating">Service rating</label>
+            <select id="create-service-rating" [(ngModel)]="form.serviceRating">
               @for (n of [1,2,3,4,5]; track n) { <option [ngValue]="n">{{ n }} ★</option> }
             </select>
           </div>
         </div>
-        <label class="req">Food review</label>
-        <textarea [(ngModel)]="form.foodReview" [class.invalid]="showErr() && !form.foodReview"></textarea>
-        <label class="req">Service review</label>
-        <textarea [(ngModel)]="form.serviceReview" [class.invalid]="showErr() && !form.serviceReview"></textarea>
+        <label class="req" for="create-food-review">Food review</label>
+        <textarea id="create-food-review" [(ngModel)]="form.foodReview" [class.invalid]="showErr() && !form.foodReview"></textarea>
+        <label class="req" for="create-service-review">Service review</label>
+        <textarea id="create-service-review" [(ngModel)]="form.serviceReview" [class.invalid]="showErr() && !form.serviceReview"></textarea>
       }
 
       <label>PG photos (optional, you can add several)</label>
       <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap">
         <label class="file-drop"><app-icon name="camera" [size]="18" /> Add photos
-          <input type="file" accept="image/*" multiple hidden (change)="onFiles($event)" />
+          <input id="create-photo-input" type="file" accept="image/*" multiple hidden (change)="onFiles($event)" />
         </label>
         <span class="muted">{{ existingUrls().length + picked().length }} image(s)</span>
       </div>
       @if (existingUrls().length || picked().length) {
-        <div class="preview-grid">
+        <div class="preview-grid" id="create-preview-grid">
           @for (u of existingUrls(); track u; let i = $index) {
-            <div class="preview-tile" [style.background-image]="'url(' + imgSrc(u) + ')'">
-              <button type="button" class="rm" (click)="removeExisting(i)"><app-icon name="close" [size]="12" /></button>
+            <div class="preview-tile" [id]="'create-existing-tile-' + i" [style.background-image]="'url(' + imgSrc(u) + ')'">
+              <button type="button" class="rm" [id]="'create-existing-remove-' + i" (click)="removeExisting(i)"><app-icon name="close" [size]="12" /></button>
             </div>
           }
           @for (p of picked(); track p.preview; let i = $index) {
-            <div class="preview-tile" [style.background-image]="'url(' + p.preview + ')'">
-              <button type="button" class="rm" (click)="removeNew(i)"><app-icon name="close" [size]="12" /></button>
+            <div class="preview-tile" [id]="'create-new-tile-' + i" [style.background-image]="'url(' + p.preview + ')'">
+              <button type="button" class="rm" [id]="'create-new-remove-' + i" (click)="removeNew(i)"><app-icon name="close" [size]="12" /></button>
             </div>
           }
         </div>
       }
 
       <div style="margin-top:20px">
-        <button class="gradient" [disabled]="loading()" (click)="submit()">
+        <button id="create-submit-btn" class="gradient" [disabled]="loading()" (click)="submit()">
           {{ loading() ? 'Saving...' : (editId() ? 'Save changes' : 'Publish listing') }}
         </button>
       </div>
-      @if (error()) { <p class="error">{{ error() }}</p> }
+      @if (error()) { <p id="create-error" class="error">{{ error() }}</p> }
     </div>
   `,
   styles: [`
@@ -236,7 +236,6 @@ export class CreateListingComponent implements OnInit {
       ? this.postingService.update(this.editId()!, this.form)
       : this.postingService.create(this.form);
     obs.subscribe({
-        //go to browse rooms for now then when my listing page will be available then go to my listings
       next: () => this.router.navigateByUrl('/my-listings'),
       error: (err) => { this.error.set(this.readError(err)); this.loading.set(false); }
     });
