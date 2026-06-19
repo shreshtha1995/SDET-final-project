@@ -91,7 +91,7 @@ export interface CreatePostingRequest {
   sharingType: SharingType;
   tenantPreference: TenantPreference;
   availableBeds: number;
-  rentAmount: number;
+  rentAmount: number | null;
   foodRating: number | null;
   foodReview: string | null;
   serviceRating: number | null;

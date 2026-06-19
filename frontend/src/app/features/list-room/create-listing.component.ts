@@ -71,7 +71,7 @@ interface Picked { file: File; preview: string; }
       </div>
 
       <label class="req" for="create-rent">Rent (₹ / month)</label>
-      <input id="create-rent" type="number" [(ngModel)]="form.rentAmount" min="1" [class.invalid]="showErr() && form.rentAmount <= 0" />
+      <input id="create-rent" type="number" [(ngModel)]="form.rentAmount" min="1" placeholder="e.g. 6000" [class.invalid]="showErr() && (form.rentAmount == null || form.rentAmount <= 0)" />
 
       @if (!isCandidate()) {
         <div class="row">
@@ -163,7 +163,7 @@ export class CreateListingComponent implements OnInit {
   form: CreatePostingRequest = {
     pgName: '', localityAndLandmark: '', officeCampus: '',
     sharingType: 'DOUBLE' as SharingType, tenantPreference: 'ANYONE' as TenantPreference,
-    availableBeds: 1, rentAmount: 0,
+    availableBeds: 1, rentAmount: null,
     foodRating: 5, foodReview: '', serviceRating: 5, serviceReview: '', imageUrls: []
   };
 
@@ -203,7 +203,7 @@ export class CreateListingComponent implements OnInit {
   submit(): void {
     this.error.set('');
     this.showErr.set(true);
-    const baseValid = !!this.form.pgName && !!this.form.localityAndLandmark && !!this.area && this.form.rentAmount > 0;
+    const baseValid = !!this.form.pgName && !!this.form.localityAndLandmark && !!this.area && (this.form.rentAmount != null && this.form.rentAmount > 0);
     const reviewsValid = this.isCandidate() || (!!this.form.foodReview && !!this.form.serviceReview);
     if (!baseValid || !reviewsValid) {
       this.error.set('Please fill all required (*) fields.');
