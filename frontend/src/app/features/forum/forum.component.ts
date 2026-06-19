@@ -52,7 +52,7 @@ import { IconComponent } from '../../shared/icon.component';
           <span class="tag">{{ label(d.category) }}</span>
           <h3 class="q-title">{{ d.title }}</h3>
           <p class="q-body">{{ d.content }}</p>
-          <div class="meta">Asked by {{ d.askedByName }} · {{ d.createdAt | date: 'medium' }}</div>
+          <div class="meta">Asked by {{ d.askedByName }}</div>
 
           <button class="replies-toggle" [id]="'forum-replies-toggle-' + d.id" (click)="toggle(d)">
             <app-icon name="chat" [size]="16" /> {{ d.answerCount || 0 }} {{ (d.answerCount === 1) ? 'reply' : 'replies' }}
