@@ -21,16 +21,11 @@ public class ImageKitImageStorage implements ImageStorage {
 
     private final ImageKitClient imageKitClient;
 
-    public ImageKitImageStorage(
-            @Value("${imagekit.public-key}") String publicKey,
-            @Value("${imagekit.private-key}") String privateKey,
-            @Value("${imagekit.url-endpoint}") String urlEndpoint) {
+    // V3 SDK only requires the Private Key for backend uploads!
+    public ImageKitImageStorage(@Value("${imagekit.private-key}") String privateKey) {
         
-        // Initialize the official ImageKit Client
         this.imageKitClient = ImageKitOkHttpClient.builder()
-                .publicKey(publicKey)
                 .privateKey(privateKey)
-                .urlEndpoint(urlEndpoint)
                 .build();
     }
 
@@ -57,21 +52,20 @@ public class ImageKitImageStorage implements ImageStorage {
         }
 
         try {
-            // Read file bytes
             byte[] fileBytes = file.getBytes();
 
-            // Set up upload parameters
             FileUploadParams params = FileUploadParams.builder()
                     .file(fileBytes)
                     .fileName(safeFileName(file.getOriginalFilename()))
-                    .folder("/campussync-uploads") // Organizes files in your ImageKit dashboard
+                    .folder("/campussync-uploads")
                     .build();
 
-            // Upload the file to ImageKit
             FileUploadResponse response = imageKitClient.files().upload(params);
 
-            // Return the direct public CDN URL provided by ImageKit
-            return response.url();
+            // V3 SDK wraps the URL in an Optional, so we extract it safely here
+            return response.url().orElseThrow(() -> 
+                ApiException.badRequest("ImageKit failed to return a URL")
+            );
 
         } catch (IOException e) {
             throw ApiException.badRequest("Failed to process image: " + e.getMessage());
@@ -84,7 +78,6 @@ public class ImageKitImageStorage implements ImageStorage {
         if (originalFilename == null || originalFilename.isBlank()) {
             return UUID.randomUUID().toString() + ".jpg";
         }
-        // Attaching a UUID ensures no files overwrite each other on ImageKit
         return UUID.randomUUID().toString() + "-" + originalFilename.replaceAll("[\\\\/]+", "_").trim();
     }
 }
