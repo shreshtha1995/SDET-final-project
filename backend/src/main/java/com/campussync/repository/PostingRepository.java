@@ -22,6 +22,7 @@ public interface PostingRepository extends JpaRepository<Posting, Long> {
      */
     @Query("""
             SELECT p FROM Posting p
+            JOIN FETCH p.postedBy 
             WHERE p.status = :status
               AND p.postedBy.gender = :gender
               AND p.postedBy.id != :userId
@@ -40,7 +41,8 @@ public interface PostingRepository extends JpaRepository<Posting, Long> {
                          @Param("tenantPreference") TenantPreference tenantPreference);
 
     /** Listings owned by a given provider. */
-    List<Posting> findByPostedByIdOrderByCreatedAtDesc(Long userId);
+    @Query("SELECT p FROM Posting p JOIN FETCH p.postedBy WHERE p.postedBy.id = :userId ORDER BY p.createdAt DESC")
+    List<Posting> findByPostedByIdOrderByCreatedAtDesc(@Param("userId") Long userId);
 
     /** Distinct office locations used to populate the filter dropdown. */
     @Query("SELECT DISTINCT p.officeCampus FROM Posting p WHERE p.status = com.campussync.model.enums.PostingStatus.AVAILABLE ORDER BY p.officeCampus")

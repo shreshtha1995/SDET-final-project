@@ -6,7 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface AnswerRepository extends JpaRepository<Answer, Long> {
-    List<Answer> findByDoubtIdOrderByCreatedAtAsc(Long doubtId);
+    @Query("SELECT a FROM Answer a JOIN FETCH a.answeredBy WHERE a.doubt.id = :doubtId ORDER BY a.createdAt ASC")
+    List<Answer> findByDoubtIdOrderByCreatedAtAsc(@Param("doubtId") Long doubtId);
     long countByDoubtId(Long doubtId);
     List<Answer> findByAnsweredById(Long userId);
 }
