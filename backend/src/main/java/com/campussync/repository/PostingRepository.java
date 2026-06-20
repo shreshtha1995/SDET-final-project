@@ -23,6 +23,7 @@ public interface PostingRepository extends JpaRepository<Posting, Long> {
     @Query("""
             SELECT p FROM Posting p
             JOIN FETCH p.postedBy 
+            LEFT JOIN FETCH p.imageUrls 
             WHERE p.status = :status
               AND p.postedBy.gender = :gender
               AND p.postedBy.id != :userId
@@ -41,7 +42,7 @@ public interface PostingRepository extends JpaRepository<Posting, Long> {
                          @Param("tenantPreference") TenantPreference tenantPreference);
 
     /** Listings owned by a given provider. */
-    @Query("SELECT p FROM Posting p JOIN FETCH p.postedBy WHERE p.postedBy.id = :userId ORDER BY p.createdAt DESC")
+   @Query("SELECT p FROM Posting p JOIN FETCH p.postedBy LEFT JOIN FETCH p.imageUrls WHERE p.postedBy.id = :userId ORDER BY p.createdAt DESC")
     List<Posting> findByPostedByIdOrderByCreatedAtDesc(@Param("userId") Long userId);
 
     /** Distinct office locations used to populate the filter dropdown. */
