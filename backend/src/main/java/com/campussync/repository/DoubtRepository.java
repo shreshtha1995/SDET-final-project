@@ -3,6 +3,8 @@ package com.campussync.repository;
 import com.campussync.model.Doubt;
 import com.campussync.model.enums.DoubtCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
