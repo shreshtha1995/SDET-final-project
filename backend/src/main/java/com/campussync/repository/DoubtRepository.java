@@ -13,5 +13,6 @@ public interface DoubtRepository extends JpaRepository<Doubt, Long> {
     List<Doubt> findAllByOrderByCreatedAtDesc();
     @Query("SELECT d FROM Doubt d JOIN FETCH d.askedBy WHERE d.category = :category ORDER BY d.createdAt DESC")
     List<Doubt> findByCategoryOrderByCreatedAtDesc(@Param("category") DoubtCategory category);;
-    List<Doubt> findByAskedById(Long userId);
+   @Query("SELECT d FROM Doubt d JOIN FETCH d.askedBy WHERE d.askedBy.id = :userId ORDER BY d.createdAt DESC")
+    List<Doubt> findByAskedById(@Param("userId") Long userId);
 }

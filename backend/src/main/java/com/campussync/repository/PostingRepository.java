@@ -54,8 +54,18 @@ public interface PostingRepository extends JpaRepository<Posting, Long> {
             Long userId, String pgName, String officeCampus, PostingStatus status);
 
     /** Active listings whose reconfirm window has opened but the reminder hasn't been sent. */
-    List<Posting> findByStatusAndReminderSentFalseAndCreatedAtBefore(PostingStatus status, LocalDateTime reminderCutoff);
+    @Query("SELECT p FROM Posting p JOIN FETCH p.postedBy WHERE p.status = :status AND p.reminderSent = false AND p.createdAt < :reminderCutoff")
+    List<Posting> findByStatusAndReminderSentFalseAndCreatedAtBefore(@Param("status") PostingStatus status, @Param("reminderCutoff") LocalDateTime reminderCutoff);
 
     /** Active listings past their expiry that were never re-confirmed. */
-    List<Posting> findByStatusAndExpiresAtBefore(PostingStatus status, LocalDateTime time);
-}
+   @Query("SELECT p FROM Posting p JOIN FETCH p.postedBy WHERE p.status = :status AND p.expiresAt < :time")
+    List<Posting> findByStatusAndExpiresAtBefore(@Param("status") PostingStatus status, @Param("time") LocalDateTime time);
+
+    // 1. Override the default findAll to prevent N+1 on the basic main feed
+    @Query("SELECT DISTINCT p FROM Posting p JOIN FETCH p.postedBy LEFT JOIN FETCH p.imageUrls ORDER BY p.createdAt DESC")
+    List<Posting> findAll();
+
+    // 2. Override the default findById to prevent N+1 when viewing a single post
+    @Query("SELECT p FROM Posting p JOIN FETCH p.postedBy LEFT JOIN FETCH p.imageUrls WHERE p.id = :id")
+    Optional<Posting> findById(@Param("id") Long id);
+    }
