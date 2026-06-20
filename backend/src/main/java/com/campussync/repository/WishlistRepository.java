@@ -3,12 +3,23 @@ package com.campussync.repository;
 import com.campussync.model.Wishlist;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
+import org.springframework.data.jpa.repository.Query;
+    import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface WishlistRepository extends JpaRepository<Wishlist, Long> {
+    
 
-    List<Wishlist> findByUserIdOrderByCreatedAtDesc(Long userId);
+    @Query("""
+        SELECT w FROM Wishlist w 
+        JOIN FETCH w.posting p 
+        JOIN FETCH p.postedBy 
+        LEFT JOIN FETCH p.imageUrls 
+        WHERE w.user.id = :userId 
+        ORDER BY w.createdAt DESC
+    """)
+    List<Wishlist> findByUserIdOrderByCreatedAtDesc(@Param("userId") Long userId);
+
 
     boolean existsByUserIdAndPostingId(Long userId, Long postingId);
 
