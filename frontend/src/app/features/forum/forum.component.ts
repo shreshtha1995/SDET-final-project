@@ -69,7 +69,7 @@ import { IconComponent } from '../../shared/icon.component';
                   <span class="c-avatar">{{ initials(a.answeredByName) }}</span>
                   <div class="c-body">
                     <div class="c-head"><strong>{{ a.answeredByName }}</strong>
-                      <span class="muted">{{ a.createdAt }}</span></div>
+                      <span class="muted">{{ a.createdAt | date:'yyyy-MM-dd' }}</span></div>
                     <div>{{ a.content }}</div>
                   </div>
                 </div>
